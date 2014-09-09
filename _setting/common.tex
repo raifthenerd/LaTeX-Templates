@@ -1,0 +1,62 @@
+% Common settings for various templates
+
+% allows using mathematical expression
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+
+% allows including images
+\usepackage{graphicx}
+
+% advanced citation option
+\usepackage{natbib}
+
+% allows using korean text
+\usepackage{fontspec} % pdflatex is NOT allowed!
+%\usepackage[hangul]{kotex}
+\usepackage{kotex}
+\defaultfontfeatures{Mapping=tex-text,Ligatures=TeX}
+\setmainhangulfont[ItalicFont={*},ItalicFeatures={FakeSlant=.167},BoldItalicFeatures={FakeSlant=.167}]{NanumMyeongjo}
+\setsanshangulfont[ItalicFont={*},ItalicFeatures={FakeSlant=.167},BoldItalicFeatures={FakeSlant=.167}]{NanumGothic}
+\ifpdf
+    \input glyphtounicode
+    \pdfgentounicode=1
+\fi
+
+% various packages for table
+\usepackage{booktabs,array,multirow}
+
+% allows include programming codes
+\usepackage{listings,color}
+\definecolor{githubred}{rgb}{0.9,0.1,0.3}
+\definecolor{githubgreen}{rgb}{0,0.5,0.5}
+\definecolor{githubblue}{rgb}{0.3,0.3,0.5}
+\definecolor{githubgrey}{rgb}{0.6,0.6,0.5}
+\lstset {
+    tabsize=4,
+    %numbers=left,
+    firstnumber=auto,
+    numberstyle=\tiny,
+    stepnumber=1,
+    breaklines=true,
+    captionpos=b,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    basicstyle=\small\ttfamily,
+    commentstyle=\color{githubgrey},
+    stringstyle=\color{githubred},
+    keywordstyle=\color{githubblue},
+}
+
+% allows using algorithm environment
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\algnewcommand\algorithmicto{\textbf{to}}
+\algnewcommand\algorithmicdownto{\textbf{downto}}
+\algdef{SE}[FOR]{ForTo}{EndForTo}[2]{\algorithmicfor\ #1 \algorithmicto\ #2 \algorithmicdo}{\algorithmicend\ \algorithmicfor}
+\algdef{SnE}[FOR]{ForTo}{EndForTo}[2]{\algorithmicfor\ #1 \algorithmicto\ #2 \algorithmicdo}
+\algdef{SE}[FOR]{ForDownTo}{EndForDownTo}[2]{\algorithmicfor\ #1 \algorithmicdownto\ #2 \algorithmicdo}{\algorithmicend\ \algorithmicfor}
+\algdef{SnE}[FOR]{ForDownTo}{EndForDownTo}[2]{\algorithmicfor\ #1 \algorithmicdownto\ #2 \algorithmicdo}
+
+% graphic package : tikz
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,backgrounds,calc,calendar,chains,er,intersections,matrix,mindmap,folding,patterns,petri,plothandlers,plotmarks,shadows,shapes.geometric,shapes.misc,snakes,spy,topaths,trees}
