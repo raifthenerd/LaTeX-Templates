@@ -27,12 +27,41 @@
 % various packages for table
 \usepackage{booktabs,array,multirow}
 
+% define color scheme
+\usepackage{xcolor}
+% Bootstrap-like color scheme
+\definecolor{black}{HTML}{000000}
+\definecolor{gray-darker}{HTML}{222222}
+\definecolor{gray-dark}{HTML}{333333}
+\definecolor{gray}{HTML}{555555}
+\definecolor{gray-light}{HTML}{777777}
+\definecolor{gray-lighter}{HTML}{EEEEEE}
+\definecolor{white}{HTML}{FFFFFF}
+\definecolor{primary}{HTML}{428BCA}
+\definecolor{primary-darken}{HTML}{357EBD}
+\definecolor{success}{HTML}{5CB85C}
+\definecolor{success-darken}{HTML}{4FAB4F}
+\definecolor{info}{HTML}{5BC0DE}
+\definecolor{info-darken}{HTML}{4EB3D1}
+\definecolor{warning}{HTML}{F0AD4E}
+\definecolor{warning-darken}{HTML}{E3A041}
+\definecolor{danger}{HTML}{D9534F}
+\definecolor{danger-darken}{HTML}{CC4642}
+% GitHub source code style color scheme
+\definecolor{githubred}{HTML}{DD1144}
+\definecolor{githubgreen}{HTML}{008080}
+\definecolor{githubblue}{HTML}{000080}
+\definecolor{githubgrey}{HTML}{999988}
+% set document color
+\makeatletter
+\newcommand{\globalcolor}[1]{%
+    \color{#1}\global\let\default@color\current@color
+}
+\makeatother
+\AtBeginDocument{\globalcolor{gray-dark}\pagecolor{white}} % change color here
+
 % allows include programming codes
-\usepackage{listings,color}
-\definecolor{githubred}{rgb}{0.9,0.1,0.3}
-\definecolor{githubgreen}{rgb}{0,0.5,0.5}
-\definecolor{githubblue}{rgb}{0.3,0.3,0.5}
-\definecolor{githubgrey}{rgb}{0.6,0.6,0.5}
+\usepackage{listings}
 \lstset {
     tabsize=4,
     %numbers=left,
@@ -63,22 +92,3 @@
 % graphic package : tikz
 \usepackage{tikz}
 \usetikzlibrary{arrows,automata,backgrounds,calc,calendar,chains,er,intersections,matrix,mindmap,folding,patterns,petri,plothandlers,plotmarks,shadows,shapes.geometric,shapes.misc,snakes,spy,topaths,trees}
-
-% Bootstrap-like color scheme
-\definecolor{black}{rgb}{0,0,0}
-\definecolor{gray-darker}{rgb}{0.135,0.135,0.135}
-\definecolor{gray-dark}{rgb}{0.2,0.2,0.2}
-\definecolor{gray}{rgb}{0.335,0.335,0.335}
-\definecolor{gray-light}{rgb}{0.467,0.467,0.467}
-\definecolor{gray-lighter}{rgb}{0.935,0.935,0.935}
-\definecolor{white}{rgb}{1,1,1}
-\definecolor{primary}{rgb}{0.258,0.543,0.789}
-\definecolor{primary-darken}{rgb}{0.208,0.493,0.739}
-\definecolor{success}{rgb}{0.359,0.719,0.359}
-\definecolor{success-darken}{rgb}{0.309,0.669,0.309}
-\definecolor{info}{rgb}{0.355,0.75,0.867}
-\definecolor{info-darken}{rgb}{0.305,0.7,0.817}
-\definecolor{warning}{rgb}{0.938,0.676,0.305}
-\definecolor{warning-darken}{rgb}{0.888,0.626,0.255}
-\definecolor{danger}{rgb}{0.848,0.324,0.309}
-\definecolor{danger-darken}{rgb}{0.798,0.274,0.259}
