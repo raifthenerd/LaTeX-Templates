@@ -9,13 +9,16 @@
 % advanced citation option
 \usepackage{natbib}
 
-% allows using korean text
+% font settings
+\usepackage{lmodern}
 \usepackage{fontspec} % pdflatex is NOT allowed!
+\setsansfont[Scale=MatchLowercase]{TeX Gyre Heros}
+\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
+
+% allows using korean text
 %\usepackage[hangul]{kotex}
 \usepackage{kotex}
 \defaultfontfeatures{Mapping=tex-text,Ligatures=TeX}
-\setsansfont[Scale=MatchLowercase]{TeX Gyre Heros}
-\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
 \setmainhangulfont[Scale=0.95,ItalicFont={*},ItalicFeatures={FakeSlant=.167},BoldItalicFeatures={FakeSlant=.167}]{KoPubBatang_Pro Light}
 \setsanshangulfont[Scale=0.875,ItalicFont={*},ItalicFeatures={FakeSlant=.167},BoldItalicFeatures={FakeSlant=.167}]{KoPubDotum_Pro Medium}
 \setmonohangulfont[Scale=0.875]{KoPubDotum_Pro Medium}
@@ -77,6 +80,7 @@
     commentstyle=\color{githubgrey},
     stringstyle=\color{githubred},
     keywordstyle=\color{githubblue},
+    upquote=true,
 }
 
 % allows using algorithm environment
