@@ -14,16 +14,51 @@
 % font settings
 \usepackage{lmodern}
 \usepackage{fontspec} % pdflatex is NOT allowed!
-\setsansfont[Scale=MatchLowercase]{TeX Gyre Heros}
-\setmonofont[Scale=MatchLowercase]{DejaVu Sans Mono}
+\setsansfont[
+    Path=_fonts/TeX Gyre/,
+    Scale=MatchLowercase,
+    UprightFont={*-regular.otf},
+    ItalicFont={*-italic.otf},
+    BoldFont={*-bold.otf},
+    BoldItalicFont={*-bolditalic.otf}
+]{texgyreheros}
+\setmonofont[
+    Path=_fonts/DejaVu/,
+    Scale=MatchLowercase,
+    UprightFont={*.ttf},
+    ItalicFont={*-Oblique.ttf},
+    BoldFont={*-Bold.ttf},
+    BoldItalicFont={*-BoldOblique.ttf}
+]{DejaVuSansMono}
 
 % allows using korean text
 %\usepackage[hangul]{kotex}
 \usepackage{kotex}
 \defaultfontfeatures{Mapping=tex-text,Ligatures=TeX}
-\setmainhangulfont[Scale=0.95,ItalicFont={*},ItalicFeatures={FakeSlant=.167},BoldItalicFeatures={FakeSlant=.167}]{KoPubBatang_Pro Light}
-\setsanshangulfont[Scale=0.875,ItalicFont={*},ItalicFeatures={FakeSlant=.167},BoldItalicFeatures={FakeSlant=.167}]{KoPubDotum_Pro Medium}
-\setmonohangulfont[Scale=0.875]{KoPubDotum_Pro Medium}
+\setmainhangulfont[
+    Path=_fonts/KoPub/,
+    Scale=0.95,
+    UprightFont={* Light.otf},
+    ItalicFont={* Light.otf}, ItalicFeatures={FakeSlant=.167},
+    BoldFont={* Bold.otf},
+    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.167}
+]{KoPubBatang_Pro}
+\setsanshangulfont[
+    Path=_fonts/KoPub/,
+    Scale=0.875,
+    UprightFont={* Medium.otf},
+    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.167},
+    BoldFont={* Bold.otf},
+    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.167}
+]{KoPubDotum_Pro}
+\setmonohangulfont[
+    Path=_fonts/KoPub/,
+    Scale=0.875,
+    UprightFont={* Medium.otf},
+    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.167},
+    BoldFont={* Bold.otf},
+    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.167}
+]{KoPubDotum_Pro}
 \ifpdf
     \input glyphtounicode
     \pdfgentounicode=1
