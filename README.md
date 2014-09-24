@@ -15,5 +15,5 @@ This template uses [TeX Gyre Heros](http://www.tug.dk/FontCatalogue/tgheros/) an
 To compile the template, type the command in terminal.
 
 ```bash
-latexmk -xelatex _main && latexmk -c
+latexmk -pvc -xelatex -interaction=nonstopmode _main && latexmk -c
 ```
