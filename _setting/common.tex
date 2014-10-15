@@ -15,6 +15,7 @@
 % font settings
 \usepackage{lmodern}
 \usepackage{fontspec} % pdflatex is NOT allowed!
+\defaultfontfeatures[\rmfamily,\sffamily]{Ligatures=TeX}
 \setsansfont[
     Path=_fonts/TeX Gyre/,
     Scale=MatchLowercase,
@@ -35,7 +36,6 @@
 % allows using korean text
 %\usepackage[hangul]{kotex}
 \usepackage{kotex}
-\defaultfontfeatures{Mapping=tex-text,Ligatures=TeX}
 \setmainhangulfont[
     Path=_fonts/KoPub/,
     Scale=0.95,
