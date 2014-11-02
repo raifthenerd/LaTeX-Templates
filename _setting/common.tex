@@ -80,39 +80,58 @@
 \definecolor{gray-light}{HTML}{777777}
 \definecolor{gray-lighter}{HTML}{EEEEEE}
 \definecolor{white}{HTML}{FFFFFF}
+
 \definecolor{primary}{HTML}{428BCA}
-\definecolor{primary-darken}{HTML}{357EBD}
+
 \definecolor{success}{HTML}{5CB85C}
-\definecolor{success-darken}{HTML}{4FAB4F}
+\definecolor{success-bg}{HTML}{DFF0D8}
+\definecolor{success-text}{HTML}{3C763D}
+
 \definecolor{info}{HTML}{5BC0DE}
-\definecolor{info-darken}{HTML}{4EB3D1}
+\definecolor{info-bg}{HTML}{D9EDF7}
+\definecolor{info-text}{HTML}{31708F}
+
 \definecolor{warning}{HTML}{F0AD4E}
-\definecolor{warning-darken}{HTML}{E3A041}
+\definecolor{warning-bg}{HTML}{FCF8E3}
+\definecolor{warning-text}{HTML}{8A6D3B}
+
 \definecolor{danger}{HTML}{D9534F}
-\definecolor{danger-darken}{HTML}{CC4642}
-% GitHub source code style color scheme
-\definecolor{githubred}{HTML}{DD1144}
-\definecolor{githubgreen}{HTML}{008080}
-\definecolor{githubblue}{HTML}{000080}
-\definecolor{githubgrey}{HTML}{999988}
+\definecolor{danger-bg}{HTML}{F2DEDE}
+\definecolor{danger-text}{HTML}{A94442}
+
+\colorlet{background}{white}
+\colorlet{text}{gray-dark}
+
+\definecolor{listing-bg}{HTML}{F5F5F5}
+\definecolor{listing-border}{HTML}{CCCCCC}
+\definecolor{listing-kwd}{HTML}{2F6F9F}
+\definecolor{listing-str}{HTML}{D44950}
+
+\definecolor{code-bg}{HTML}{F9F2F4}
+\definecolor{code-text}{HTML}{C7254E}
+\colorlet{kbd-bg}{gray}
+\colorlet{kbd-text}{gray-lighter}
 % set document color
 \makeatletter
 \newcommand{\globalcolor}[1]{%
     \color{#1}\global\let\default@color\current@color
 }
 \makeatother
-\AtBeginDocument{\globalcolor{gray-dark}\pagecolor{white}} % change color here
+\AtBeginDocument{\globalcolor{text}\pagecolor{background}} % change color here
+
+% graphic package : tikz
+\usepackage{tikz}
 
 % allows include programming codes
 \usepackage{listings}
 \lstset {
     tabsize=4,
-    %numbers=left,
+    numbers=left,
     firstnumber=auto,
-    numberstyle=\color{githubgrey}\tiny,
+    numberstyle=\color{listing-border}\tiny\ttfamily,
     numbersep=8pt,
     stepnumber=1,
-    %frame=single,
+    frame=single,
     frameround=tttt,
     rulesep=8pt,
     breaklines=true,
@@ -122,10 +141,37 @@
     showstringspaces=false,
     showtabs=false,
     basicstyle=\small\ttfamily,
-    commentstyle=\color{githubgreen},
-    stringstyle=\color{githubred},
-    keywordstyle=\color{githubblue},
+    backgroundcolor=\color{listing-bg},
+    rulecolor=\color{listing-border},
+    commentstyle=\color{gray-light},
+    stringstyle=\color{listing-str},
+    keywordstyle=\color{listing-kwd},
     upquote=true,
+}
+% inline environment: code / keyboard
+\lstdefinestyle{code}{
+    basicstyle=\small\ttfamily\color{code-text},
+    keywordstyle={}, commentstyle={}, stringstyle={},
+}
+\newcommand\code[2][]{
+    \tikz[overlay]\node[
+        fill=code-bg, inner sep=2pt,
+        text depth=0.2ex, text height=1.25ex,
+        anchor=text, rectangle, rounded corners=1mm]
+        {\lstinline[style=code]§#2§};
+    \phantom{\lstinline§#2§\hskip-.8ex}
+}
+\lstdefinestyle{kbd}{
+    basicstyle=\small\ttfamily\color{kbd-text},
+    keywordstyle={}, commentstyle={}, stringstyle={},
+}
+\newcommand\kbd[2][]{
+    \tikz[overlay]\node[
+        fill=kbd-bg, inner sep=2pt,
+        text depth=0.2ex, text height=1.25ex,
+        anchor=text, rectangle, rounded corners=1mm]
+        {\lstinline[style=kbd]§#2§};
+    \phantom{\lstinline§#2§\hskip-.8ex}
 }
 
 % allows using algorithm environment
@@ -137,6 +183,3 @@
 \algdef{SnE}[FOR]{ForTo}{EndForTo}[2]{\algorithmicfor\ #1 \algorithmicto\ #2 \algorithmicdo}
 \algdef{SE}[FOR]{ForDownTo}{EndForDownTo}[2]{\algorithmicfor\ #1 \algorithmicdownto\ #2 \algorithmicdo}{\algorithmicend\ \algorithmicfor}
 \algdef{SnE}[FOR]{ForDownTo}{EndForDownTo}[2]{\algorithmicfor\ #1 \algorithmicdownto\ #2 \algorithmicdo}
-
-% graphic package : tikz
-\usepackage{tikz}
