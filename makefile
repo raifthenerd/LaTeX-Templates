@@ -1,5 +1,5 @@
 LATEX=latexmk
-TARGET=_main.pdf
+TARGET=main.pdf
 
 DFFLAG=-xelatex -interaction=nonstopmode
 RFLAG=-quiet
