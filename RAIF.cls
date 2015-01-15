@@ -220,7 +220,7 @@
 \setlist[itemize,4]{label=$\cdot$}
 
 % hyperlink option
-\RequirePackage{hyperref}
+\RequirePackage[pdfusetitle]{hyperref}
 \ifmemoir
     \hypersetup {
         unicode=true,
