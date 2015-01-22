@@ -238,9 +238,16 @@
 \fi
 
 % advanced citations, references, captions
-\ifbst
+\iffootcite
+    \RequirePackage[notes,natbib]{biblatex-chicago}
+    \bibliography{bibliography}
+\else
     \RequirePackage[sort&compress]{natbib}
-    \bibliographystyle{\bst}
+    \ifbst
+        \bibliographystyle{\bst}
+    \else
+        \bibliographystyle{chicago}
+    \fi
     \newcommand{\autocite}[2][]{
         \ifx&#1&
             \cite{#2}
@@ -249,13 +256,6 @@
         \fi
     }
     \newcommand{\printbibliography}{\bibliography{bibliography}}
-\else
-    \iffootcite
-        \RequirePackage[notes,natbib]{biblatex-chicago}
-    \else
-        \RequirePackage[authordate,natbib]{biblatex-chicago}
-    \fi
-    \bibliography{bibliography}
 \fi
 \RequirePackage{cleveref,caption}
 \newcommand{\crefrangeconjunction}{--}
