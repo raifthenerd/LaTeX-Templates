@@ -403,7 +403,14 @@
 \fi\fi
 \RequirePackage{fontspec}
 \defaultfontfeatures[\rmfamily,\sffamily]{Ligatures=TeX}
-\setsansfont[Scale=MatchUppercase]{TeX Gyre Heros}
+\setsansfont[
+    Path=_fonts/TeX Gyre/,
+    Scale=MatchUppercase,
+    UprightFont={*-regular.otf},
+    ItalicFont={*-italic.otf},
+    BoldFont={*-bold.otf},
+    BoldItalicFont={*-bolditalic.otf}
+]{texgyreheros}
 
 % korean option
 \RequirePackage{xetexko}
