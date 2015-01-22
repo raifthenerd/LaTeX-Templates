@@ -3,11 +3,8 @@
 
 % cancel compiling if the engine is neither LuaTeX nor XeTeX
 \RequirePackage{iftex}
-\newif\ifNotLuaOrXeTeX\NotLuaOrXeTeXtrue
-\ifXeTeX\global\NotLuaOrXeTeXfalse\fi
-\ifLuaTeX\global\NotLuaOrXeTeXfalse\fi
-\ifNotLuaOrXeTeX
-    \ClassError{RAIF}{Requires XeTeX or LuaTeX; no pdfLaTeX!}{Requires XeTeX or LuaTeX; no pdfLaTeX!}
+\ifXeTeX\else
+    \ClassError{RAIF}{Requires XeTeX!}{No LuaTeX, pdfLaTeX, etc.}
 \fi
 
 \RequirePackage{xkeyval}
@@ -42,7 +39,7 @@
 \newif\ifhangul\hangulfalse
 \DeclareOptionX{hangul}{
     \hangultrue
-    \PassOptionsToPackage{\CurrentOption}{kotex}
+    \PassOptionsToPackage{\CurrentOption}{xetexko}
 }
 
 % some memoir options (e.g. article / oneside) that used in this class
@@ -220,7 +217,7 @@
 \setlist[itemize,4]{label=$\cdot$}
 
 % hyperlink option
-\RequirePackage[pdfusetitle]{hyperref}
+\RequirePackage[pdfusetitle,bookmarks,pdfencoding=auto]{hyperref}
 \ifmemoir
     \hypersetup {
         unicode=true,
@@ -309,6 +306,7 @@
             \renewcommand{\@makefntext}[1]{\noindent\makebox[1.5em][r]\@thefnmark) #1}
         \fi
     \makeatother
+    \RequirePackage{ulem}
     \crefname{figure}{그림}{그림}
     \Crefname{figure}{그림}{그림}
     \crefname{table}{표}{표}
@@ -398,31 +396,17 @@
     \renewcommand{\familydefault}{\rmdefault}
 \fi
 \ifmathsans
-    \usepackage{eulervm}
-    \usepackage[helvet,slantedGreek]{sfmath}
+    \RequirePackage{eulervm}
+    \RequirePackage[helvet,slantedGreek]{sfmath}
 \else\ifbeamer
     \renewcommand{\mathfamilydefault}{\rmdefault}
 \fi\fi
-\RequirePackage{kotex}
+\RequirePackage{fontspec}
 \defaultfontfeatures[\rmfamily,\sffamily]{Ligatures=TeX}
-\setmainfont[
-    Scale=MatchLowercase,
-    SlantedFont={* Slanted},
-    SmallCapsFont={* Caps},
-    BoldFeatures={
-        SmallCapsFeatures={FakeBold=.5}
-    },
-    ItalicFeatures={
-        SmallCapsFeatures={FakeSlant=.167}
-    },
-    BoldItalicFeatures={
-        SmallCapsFeatures={FakeSlant=.167,FakeBold=.5}
-    },
-]{Latin Modern Roman}
 \setsansfont[Scale=MatchUppercase]{TeX Gyre Heros}
-\setmonofont[Scale=MatchLowercase]{Latin Modern Mono}
 
 % korean option
+\RequirePackage{xetexko}
 \setmainhangulfont[
     Path=_fonts/KoPub/,
     UprightFont={* Light.otf},
@@ -446,6 +430,7 @@
     BoldFont={* Bold.otf},
     BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
 ]{KoPubDotum_Pro}
+\hanjabyhangulfont
 \ifhangul\ifmemoir
     \AtBeginDocument{
         \renewcommand{\partname}{}
