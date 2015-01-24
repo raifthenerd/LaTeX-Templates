@@ -283,7 +283,7 @@
     }
     \newcommand{\printbibliography}{\bibliography{bibliography}}
 \fi
-\RequirePackage{cleveref,caption}
+\RequirePackage{cleveref}
 \newcommand{\crefrangeconjunction}{--}
 \newcommand{\crefmiddleconjunction}{, }
 \crefformat{section}{\S#2#1#3}
@@ -323,16 +323,19 @@
 \crefname{lstlisting}{listing}{listings}
 \Crefname{lstlisting}{Listing}{Listings}
 \ifhangul
-    \DeclareCaptionLabelFormat{hangul}{<#1 #2>}
-    \captionsetup{labelformat=hangul,labelsep=space}
+    \RequirePackage{ulem}
     \makeatletter
         \ifmemoir
+            \captionnamefont{<}
+            \captiondelim{> }
             \footmarkstyle{#1) }
         \fi\ifbeamer
+            \RequirePackage{caption}
+            \DeclareCaptionLabelFormat{hangul}{<#1 #2>}
+            \captionsetup{labelformat=hangul,labelsep=space}
             \renewcommand{\@makefntext}[1]{\noindent\makebox[1.5em][r]\@thefnmark) #1}
         \fi
     \makeatother
-    \RequirePackage{ulem}
     \crefname{figure}{그림}{그림}
     \Crefname{figure}{그림}{그림}
     \crefname{table}{표}{표}
