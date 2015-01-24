@@ -1,7 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{RAIF}[2015/01/06 RAIF: Personal LaTeX templates]
 
-% cancel compiling if the engine is neither LuaTeX nor XeTeX
+% cancel compiling if the engine is not XeTeX
 \RequirePackage{iftex}
 \ifXeTeX\else
     \ClassError{RAIF}{Requires XeTeX!}{No LuaTeX, pdfLaTeX, etc.}
