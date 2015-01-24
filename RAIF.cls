@@ -9,6 +9,24 @@
 
 \RequirePackage{xkeyval}
 
+% hyperref option : borderlinks (memoir default) / colorlinks (beamer default) / hidelinks
+\newif\ifcolorlinks\colorlinksfalse
+\newif\ifhidelinks\hidelinksfalse
+\DeclareOptionX{hidelinks}{
+    \hidelinkstrue\colorlinksfalse
+    \PassOptionsToPackage{\CurrentOption}{hyperref}
+}
+\DeclareOptionX{borderlinks}{
+    \ifhidelinks\else
+        \PassOptionsToPackage{colorlinks=false}{hyperref}
+    \fi
+}
+\DeclareOptionX{colorlinks}{
+    \ifhidelinks\else
+        \PassOptionsToPackage{colorlinks=true}{hyperref}
+    \fi
+}
+
 % typography option : allserif (memoir default) / mathserif / allsans (beamer default)
 \newif\ifdefaultsans\defaultsansfalse
 \newif\ifmathsans\mathsansfalse
@@ -24,6 +42,7 @@
     \memoirtrue\beamerfalse
     \renewcommand{\baseclass}{memoir}
     \ExecuteOptionsX{allserif}
+    \ExecuteOptionsX{borderlinks}
 }
 \DeclareOptionX{beamer}{
     \memoirfalse\beamertrue
@@ -31,6 +50,7 @@
     \PassOptionsToClass{notheorems}{\baseclass}
     \PassOptionsToClass{compress}{\baseclass}
     \ExecuteOptionsX{allsans}
+    \ExecuteOptionsX{colorlinks}
     \ExecuteOptionsX{titlepage}
 }
 \ExecuteOptionsX{memoir}
@@ -217,23 +237,29 @@
 \setlist[itemize,4]{label=$\cdot$}
 
 % hyperlink option
-\RequirePackage[pdfusetitle,bookmarks,pdfencoding=auto]{hyperref}
-\ifmemoir
-    \hypersetup {
-        unicode=true,
-        hidelinks,
-        pdfstartview=FitH,
-    }
-\fi
+\RequirePackage[
+    breaklinks,
+    pdfusetitle,
+    pdfencoding=auto,
+    pdfstartview={FitH},
+    bookmarks=true,
+    linkbordercolor=danger,
+    citebordercolor=success,
+    urlbordercolor=primary,
+]{hyperref}
 \ifbeamer
     \hypersetup {
-        unicode=true,
-        colorlinks=true,
         linkcolor=text,
         citecolor=success,
-        filecolor=warning,
         urlcolor=primary,
-        pdfstartview=Fit,
+        filecolor=info,
+    }
+\fi\ifmemoir
+    \hypersetup {
+        linkcolor=danger,
+        citecolor=success,
+        urlcolor=primary,
+        filecolor=info,
     }
 \fi
 
