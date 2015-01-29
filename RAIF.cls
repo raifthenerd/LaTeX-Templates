@@ -22,12 +22,14 @@
     \hidelinksfalse\colorlinkstrue
 }
 
-% typography option : allserif (memoir default) / mathserif / allsans (beamer default)
+% typography option : allserif (memoir default) / mathserif / titlesans / allsans (beamer default)
 \newif\ifdefaultsans\defaultsansfalse
 \newif\ifmathsans\mathsansfalse
-\DeclareOptionX{allserif}{\defaultsansfalse\mathsansfalse}
-\DeclareOptionX{mathserif}{\defaultsanstrue\mathsansfalse}
-\DeclareOptionX{allsans}{\mathsanstrue\defaultsanstrue}
+\newif\iftitlesans\titlesansfalse
+\DeclareOptionX{allserif}{\defaultsansfalse\mathsansfalse\titlesansfalse}
+\DeclareOptionX{mathserif}{\defaultsanstrue\mathsansfalse\titlesansfalse}
+\DeclareOptionX{titlesans}{\defaultsansfalse\mathsansfalse\titlesanstrue}
+\DeclareOptionX{allsans}{\mathsanstrue\defaultsanstrue\titlesansfalse}
 
 % base class : memoir (default) / beamer
 \newcommand{\baseclass}{}
@@ -132,6 +134,81 @@
 \makeatother
 \AtBeginDocument{\globalcolor{text}\pagecolor{background}}
 
+% memoir template
+\ifmemoir
+    \ifarticle
+        \counterwithout{section}{chapter}
+        \setsecnumdepth{subsubsection}
+        \settocdepth{subsubsection}
+        \cftsetindents{section}{0em}{1.5em}
+        \cftsetindents{subsection}{1.5em}{2.3em}
+        \cftsetindents{subsubsection}{3.8em}{3.2em}
+        \renewcommand{\cftsectionfont}{\bfseries}
+        \renewcommand{\cftsectionpresnum}{}
+        \renewcommand{\cftsectionaftersnum}{}
+        \renewcommand{\cftsectionaftersnumb}{}
+        \renewcommand{\cftsectionleader}{\bfseries\cftdotfill{\cftsectiondotsep}}
+        \renewcommand{\cftsectiondotsep}{\cftnodots}
+        \renewcommand{\cftsectionpagefont}{\bfseries}
+        \renewcommand{\cftsectionafterpnum}{}
+        \makeatletter
+            \setlength{\cftbeforesectionskip}{1.0em \@plus\p@}
+            \renewcommand*{\toclevel@section}{0}
+            \renewcommand*{\toclevel@subsection}{1}
+            \renewcommand*{\toclevel@subsubsection}{2}
+        \makeatother
+    \else
+        \setsecnumdepth{subsection}
+        \settocdepth{subsection}
+    \fi
+\fi
+% beamer template
+\ifbeamer
+    \usefonttheme{structurebold}
+    \setbeamertemplate{caption}[numbered]
+    \setbeamertemplate{theorems}[numbered]
+    \newcommand{\insertsectionHEAD}{
+        \expandafter\insertsectionHEADaux\insertsectionhead}
+        \newcommand{\insertsectionHEADaux}[3]{\MakeUppercase{#3}
+    }
+    \ifsectionpage
+        \AtBeginSection{\begingroup
+            \setbeamercolor{background canvas}{bg=text}
+            \begin{frame}
+                \centering
+                \vfill\usebeamerfont{section title}\textcolor{background}{\insertsectionHEAD}\vfill
+            \end{frame}
+        \endgroup}
+    \fi
+    % color scheme
+    \setbeamercolor{normal text}{fg=text}
+    \setbeamercolor{alerted text}{fg=danger}
+    \setbeamercolor{example text}{fg=info}
+    \setbeamercolor{structure}{fg=gray-dark}
+    \setbeamercolor{title}{parent=normal text}
+    \setbeamercolor{subtitle}{parent=normal text}
+    \setbeamercolor{institute}{parent=normal text}
+    \setbeamercolor{frametitle}{fg=background, bg=text}
+    \setbeamercolor{block title}{fg=background, bg=gray-light}
+    \setbeamercolor{block body}{fg=text, bg=gray-lighter}
+    \setbeamercolor{block title example}{fg=background, bg=info}
+    \setbeamercolor{block body example}{fg=text, bg=info-bg}
+    \setbeamercolor{block title alerted}{fg=background, bg=danger}
+    \setbeamercolor{block body alerted}{fg=text, bg=danger-bg}
+    \setbeamercolor{page number in head/foot}{fg=gray-light}
+    \makeatletter
+    \def\th@plain{
+        \def\inserttheoremblockenv{block}
+    }
+    \def\th@definition{
+        \def\inserttheoremblockenv{exampleblock}
+    }
+    \def\th@remark{
+        \def\inserttheoremblockenv{alertblock}
+    }
+    \makeatother
+\fi
+
 % allows using mathematical expression
 \RequirePackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -198,6 +275,23 @@
     \RequirePackage{algorithm}
 \fi
 \RequirePackage[noend]{algpseudocode}
+\makeatletter
+\ifhangul
+\newcommand\floatc@algo[2]{\setbox\@tempboxa\hbox{\@fs@cfont <#1> #2}%
+    \ifdim\wd\@tempboxa>\hsize \@fs@cfont <#1> #2\par
+    \else\hbox to\hsize{\hfil\box\@tempboxa\hfil}\fi}
+\else
+\newcommand\floatc@algo[2]{\setbox\@tempboxa\hbox{\@fs@cfont #1: #2}%
+    \ifdim\wd\@tempboxa>\hsize \@fs@cfont #1: #2\par
+    \else\hbox to\hsize{\hfil\box\@tempboxa\hfil}\fi}
+\fi
+\newcommand\fs@algo{\def\@fs@cfont{\iftitlesans\sffamily\fi}\let\@fs@capt\floatc@algo
+    \def\@fs@pre{}\def\@fs@post{}
+    \def\@fs@mid{\vspace\abovecaptionskip\relax}
+    \let\@fs@iftopcapt\iffalse}
+\makeatother
+\floatstyle{algo}
+\restylefloat{algorithm}
 \ifhangul
     \makeatletter
         \renewcommand{\ALG@name}{알고리즘}
@@ -414,67 +508,6 @@
     \newcommand{\creflastgroupconjunction}{, 그리고 }
 \fi
 
-% font settings
-\ifdefaultsans
-    \renewcommand{\familydefault}{\sfdefault}
-\else
-    \renewcommand{\familydefault}{\rmdefault}
-\fi
-\ifmathsans
-    \RequirePackage{eulervm}
-    \RequirePackage[helvet,slantedGreek]{sfmath}
-\else\ifbeamer
-    \renewcommand{\mathfamilydefault}{\rmdefault}
-\fi\fi
-\RequirePackage{fontspec}
-\defaultfontfeatures[\rmfamily,\sffamily]{Ligatures=TeX}
-\setsansfont[
-    Path=_fonts/TeX Gyre/,
-    Scale=MatchUppercase,
-    UprightFont={*-regular.otf},
-    ItalicFont={*-italic.otf},
-    BoldFont={*-bold.otf},
-    BoldItalicFont={*-bolditalic.otf}
-]{texgyreheros}
-
-% korean option
-\RequirePackage{xetexko}
-\setmainhangulfont[
-    Path=_fonts/KoPub/,
-    UprightFont={* Light.otf},
-    ItalicFont={* Light.otf}, ItalicFeatures={FakeSlant=.367},
-    BoldFont={* Bold.otf},
-    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
-]{KoPubBatang_Pro}
-\setsanshangulfont[
-    Path=_fonts/KoPub/,
-    Scale=MatchUppercase,
-    UprightFont={* Medium.otf},
-    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.367},
-    BoldFont={* Bold.otf},
-    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
-]{KoPubDotum_Pro}
-\setmonohangulfont[
-    Path=_fonts/KoPub/,
-    Scale=MatchLowercase,
-    UprightFont={* Medium.otf},
-    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.367},
-    BoldFont={* Bold.otf},
-    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
-]{KoPubDotum_Pro}
-\hanjabyhangulfont
-\ifhangul\ifmemoir
-    \AtBeginDocument{
-        \renewcommand{\partname}{}
-        \renewcommand{\partnamenum}[1]{제~#1~편}
-        \ifarticle\else
-            \renewcommand{\chaptername}{}
-            \renewcommand{\chapternamenum}[1]{제~#1~장}
-        \fi
-        \renewcommand{\abstractname}{초~록}
-    }
-\fi\fi
-
 % allows include programming codes
 \RequirePackage{listings}
 \ifhangul
@@ -493,7 +526,7 @@
 % default styles : memoir / beamer
 \lstdefinestyle{memoir} {
     numberstyle=\tiny\ttfamily,
-    frame=single,
+    frame=none,
     backgroundcolor=\color{background},
     rulecolor=\color{text},
     commentstyle=\em,
@@ -545,10 +578,13 @@
     numbers=none,
     tabsize=4,
     firstnumber=auto,
-    numbersep=1.5em,
+    numbersep=8pt,
     stepnumber=1,
-    rulesep=1.5em,
     breaklines=true,
+    breakindent=12pt,
+    aboveskip=\floatsep,
+    belowskip=\floatsep,
+    xleftmargin=16pt,
     captionpos=b,
     showspaces=false,
     keepspaces=true,
@@ -575,82 +611,138 @@
     \phantom{\lstinline§#2§\hskip-.8ex}
 }
 
-% memoir template
-\ifmemoir
-    \ifarticle
-        \counterwithout{section}{chapter}
-        \setsecnumdepth{subsubsection}
-        \settocdepth{subsubsection}
-        \cftsetindents{section}{0em}{1.5em}
-        \cftsetindents{subsection}{1.5em}{2.3em}
-        \cftsetindents{subsubsection}{3.8em}{3.2em}
-        \renewcommand{\cftsectionfont}{\bfseries}
-        \renewcommand{\cftsectionpresnum}{}
-        \renewcommand{\cftsectionaftersnum}{}
-        \renewcommand{\cftsectionaftersnumb}{}
-        \renewcommand{\cftsectionleader}{\bfseries\cftdotfill{\cftsectiondotsep}}
-        \renewcommand{\cftsectiondotsep}{\cftnodots}
-        \renewcommand{\cftsectionpagefont}{\bfseries}
-        \renewcommand{\cftsectionafterpnum}{}
+% font settings
+\ifdefaultsans
+    \renewcommand{\familydefault}{\sfdefault}
+\else
+    \renewcommand{\familydefault}{\rmdefault}
+\fi
+\ifmathsans
+    \RequirePackage{eulervm}
+    \RequirePackage[helvet,slantedGreek]{sfmath}
+\else\ifbeamer
+    \renewcommand{\mathfamilydefault}{\rmdefault}
+\fi\fi
+\iftitlesans
+    \ifmemoir
         \makeatletter
-            \setlength{\cftbeforesectionskip}{1.0em \@plus\p@}
-            \renewcommand*{\toclevel@section}{0}
-            \renewcommand*{\toclevel@subsection}{1}
-            \renewcommand*{\toclevel@subsubsection}{2}
+            \thm@headfont{\bfseries\sffamily}
+            \def\th@remark{
+                \thm@headfont{\itshape\sffamily}
+                \normalfont
+                \thm@preskip\topsep
+                \divide\thm@preskip\tw@
+                \thm@postskip\thm@preskip
+            }
         \makeatother
-    \else
-        \setsecnumdepth{subsection}
-        \settocdepth{subsection}
+        \let\oldcftbookfont\cftbookfont
+        \renewcommand*{\cftbookfont}{\oldcftbookfont\sffamily}
+        \let\oldcftpartfont\cftpartfont
+        \renewcommand*{\cftpartfont}{\oldcftpartfont\sffamily}
+        \let\oldcftchapterfont\cftchapterfont
+        \renewcommand*{\cftchapterfont}{\oldcftchapterfont\sffamily}
+        \let\oldcftsectionfont\cftsectionfont
+        \renewcommand*{\cftsectionfont}{\oldcftsectionfont\sffamily}
+        \let\oldcftsubsectionfont\cftsubsectionfont
+        \renewcommand*{\cftsubsectionfont}{\oldcftsubsectionfont\sffamily}
+        \let\oldcftsubsubsectionfont\cftsubsubsectionfont
+        \renewcommand*{\cftsubsubsectionfont}{\oldcftsubsubsectionfont\sffamily}
+        \let\oldcftfigurefont\cftfigurefont
+        \renewcommand*{\cftfigurefont}{\oldcftfigurefont\sffamily}
+        \let\oldcfttablefont\cfttablefont
+        \renewcommand*{\cfttablefont}{\oldcfttablefont\sffamily}
+        \let\oldcftlstlistingfont\cftlstlistingfont
+        \renewcommand*{\cftlstlistingfont}{\oldcftlstlistingfont\sffamily}
+        \let\oldcftalgorithmfont\cftalgorithmfont
+        \renewcommand*{\cftalgorithmfont}{\oldcftalgorithmfont\sffamily}
+        \let\oldbooknamefont\booknamefont
+        \renewcommand*{\booknamefont}{\oldbooknamefont\sffamily}
+        \let\oldbooknumfont\booknumfont
+        \renewcommand*{\booknumfont}{\oldbooknumfont\sffamily}
+        \let\oldbooktitlefont\booktitlefont
+        \renewcommand*{\booktitlefont}{\oldbooktitlefont\sffamily}
+        \let\oldpartnamefont\partnamefont
+        \renewcommand*{\partnamefont}{\oldpartnamefont\sffamily}
+        \let\oldpartnumfont\partnumfont
+        \renewcommand*{\partnumfont}{\oldpartnumfont\sffamily}
+        \let\oldparttitlefont\parttitlefont
+        \renewcommand*{\parttitlefont}{\oldparttitlefont\sffamily}
+        \let\oldchapnamefont\chapnamefont
+        \renewcommand*{\chapnamefont}{\oldchapnamefont\sffamily}
+        \let\oldchapnumfont\chapnumfont
+        \renewcommand*{\chapnumfont}{\oldchapnumfont\sffamily}
+        \let\oldchaptitlefont\chaptitlefont
+        \renewcommand*{\chaptitlefont}{\oldchaptitlefont\sffamily}
+        \let\oldsecheadstyle\secheadstyle
+        \renewcommand*{\secheadstyle}{\oldsecheadstyle\sffamily}
+        \let\oldsubsecheadstyle\subsecheadstyle
+        \renewcommand*{\subsecheadstyle}{\oldsubsecheadstyle\sffamily}
+        \let\oldsubsubsecheadstyle\subsubsecheadstyle
+        \renewcommand*{\subsubsecheadstyle}{\oldsubsubsecheadstyle\sffamily}
+        \let\oldparaheadstyle\paraheadstyle
+        \renewcommand*{\paraheadstyle}{\oldparaheadstyle\sffamily}
+        \let\oldsubparaheadstyle\subparaheadstyle
+        \renewcommand*{\subparaheadstyle}{\oldsubparaheadstyle\sffamily}
+        \let\oldabstractnamefont\abstractnamefont
+        \renewcommand*{\abstractnamefont}{\oldabstractnamefont\sffamily}
+        \precaption{\sffamily}
+        \captiontitlefont{\sffamily}
+        \makeatletter
+        \makeatother
+    \fi\ifbeamer
+        \setbeamerfont{structure}{series=\bfseries\sffamily}
+        \setbeamerfont{tiny structure}{series=\bfseries\sffamily}
+        \setbeamerfont{block title}{size={}}
     \fi
 \fi
+\RequirePackage{fontspec}
+\defaultfontfeatures[\rmfamily,\sffamily]{Ligatures=TeX}
+\setsansfont[
+    Path=_fonts/TeX Gyre/,
+    Scale=MatchUppercase,
+    UprightFont={*-regular.otf},
+    ItalicFont={*-italic.otf},
+    BoldFont={*-bold.otf},
+    BoldItalicFont={*-bolditalic.otf}
+]{texgyreheros}
 
-% beamer template
-\ifbeamer
-    \usefonttheme{structurebold}
-    \setbeamertemplate{caption}[numbered]
-    \setbeamertemplate{theorems}[numbered]
-
-    \newcommand{\insertsectionHEAD}{
-        \expandafter\insertsectionHEADaux\insertsectionhead}
-        \newcommand{\insertsectionHEADaux}[3]{\MakeUppercase{#3}
+% korean option
+\RequirePackage{xetexko}
+\setmainhangulfont[
+    Path=_fonts/KoPub/,
+    UprightFont={* Light.otf},
+    ItalicFont={* Light.otf}, ItalicFeatures={FakeSlant=.367},
+    BoldFont={* Bold.otf},
+    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
+]{KoPubBatang_Pro}
+\setsanshangulfont[
+    Path=_fonts/KoPub/,
+    Scale=MatchUppercase,
+    UprightFont={* Medium.otf},
+    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.367},
+    BoldFont={* Bold.otf},
+    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
+]{KoPubDotum_Pro}
+\setmonohangulfont[
+    Path=_fonts/KoPub/,
+    Scale=MatchLowercase,
+    UprightFont={* Medium.otf},
+    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.367},
+    BoldFont={* Bold.otf},
+    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
+]{KoPubDotum_Pro}
+\hanjabyhangulfont
+\ifhangul\ifmemoir
+    \AtBeginDocument{
+        \renewcommand{\partname}{}
+        \renewcommand{\partnamenum}[1]{제~#1~편}
+        \ifarticle\else
+            \renewcommand{\chaptername}{}
+            \renewcommand{\chapternamenum}[1]{제~#1~장}
+        \fi
+        \renewcommand{\abstractname}{초~록}
     }
-    \ifsectionpage
-        \AtBeginSection{\begingroup
-            \setbeamercolor{background canvas}{bg=text}
-            \begin{frame}
-                \centering
-                \vfill\usebeamerfont{section title}\textcolor{background}{\insertsectionHEAD}\vfill
-            \end{frame}
-        \endgroup}
-    \fi
-    % color scheme
-    \setbeamercolor{normal text}{fg=text}
-    \setbeamercolor{alerted text}{fg=danger}
-    \setbeamercolor{example text}{fg=info}
-    \setbeamercolor{structure}{fg=gray-dark}
-    \setbeamercolor{title}{parent=normal text}
-    \setbeamercolor{subtitle}{parent=normal text}
-    \setbeamercolor{institute}{parent=normal text}
-    \setbeamercolor{frametitle}{fg=background, bg=text}
-    \setbeamercolor{block title}{fg=background, bg=gray-light}
-    \setbeamercolor{block body}{fg=text, bg=gray-lighter}
-    \setbeamercolor{block title example}{fg=background, bg=info}
-    \setbeamercolor{block body example}{fg=text, bg=info-bg}
-    \setbeamercolor{block title alerted}{fg=background, bg=danger}
-    \setbeamercolor{block body alerted}{fg=text, bg=danger-bg}
-    \setbeamercolor{page number in head/foot}{fg=gray-light}
-    \makeatletter
-    \def\th@plain{
-        \def\inserttheoremblockenv{block}
-    }
-    \def\th@definition{
-        \def\inserttheoremblockenv{exampleblock}
-    }
-    \def\th@remark{
-        \def\inserttheoremblockenv{alertblock}
-    }
-    \makeatother
-\fi
+\fi\fi
 
 % \titlepage design
 \ifmemoir
@@ -658,8 +750,14 @@
     \newcommand{\subt}{}
     \newcommand{\institute}[1]{\gdef\inst{#1}}
     \newcommand{\inst}{}
+    \pretitle{\begin{center}\LARGE\iftitlesans\sffamily\fi}
+    \preauthor{\begin{center}
+        \large\iftitlesans\sffamily\fi \lineskip 0.5em%
+        \begin{tabular}[t]{c}}
+    \predate{\begin{center}\large\iftitlesans\sffamily\fi}
     \makeatletter
         \newcommand{\titlepage}{\begin{titlingpage}
+            \iftitlesans\sffamily\fi
             \@bsmarkseries\def\@makefnmark{\@textsuperscript{\@bsthanksheadpre\tamark\@bsthanksheadpost}}
             \long\def\@makefntext##1{\makethanksmark ##1}
             \ifoneside\centering\fi
