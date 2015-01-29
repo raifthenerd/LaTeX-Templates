@@ -14,17 +14,12 @@
 \newif\ifhidelinks\hidelinksfalse
 \DeclareOptionX{hidelinks}{
     \hidelinkstrue\colorlinksfalse
-    \PassOptionsToPackage{\CurrentOption}{hyperref}
 }
 \DeclareOptionX{borderlinks}{
-    \ifhidelinks\else
-        \PassOptionsToPackage{colorlinks=false}{hyperref}
-    \fi
+    \hidelinksfalse\colorlinksfalse
 }
 \DeclareOptionX{colorlinks}{
-    \ifhidelinks\else
-        \PassOptionsToPackage{colorlinks=true}{hyperref}
-    \fi
+    \hidelinksfalse\colorlinkstrue
 }
 
 % typography option : allserif (memoir default) / mathserif / allsans (beamer default)
@@ -237,7 +232,13 @@
 \setlist[itemize,4]{label=$\cdot$}
 
 % hyperlink option
-\RequirePackage[
+\ifmemoir
+    \RequirePackage{hyperref}
+    \hypersetup{linkcolor=danger}
+\fi\ifbeamer
+    \hypersetup{linkcolor=text}
+\fi
+\hypersetup {
     breaklinks,
     pdfusetitle,
     pdfencoding=auto,
@@ -246,22 +247,17 @@
     linkbordercolor=danger,
     citebordercolor=success,
     urlbordercolor=primary,
-]{hyperref}
-\ifbeamer
-    \hypersetup {
-        linkcolor=text,
-        citecolor=success,
-        urlcolor=primary,
-        filecolor=info,
-    }
-\fi\ifmemoir
-    \hypersetup {
-        linkcolor=danger,
-        citecolor=success,
-        urlcolor=primary,
-        filecolor=info,
-    }
-\fi
+    citecolor=success,
+    urlcolor=primary,
+    filecolor=info,
+}
+\ifhidelinks
+    \hypersetup{hidelinks}
+\else\ifcolorlinks
+    \hypersetup{colorlinks=true}
+\else
+    \hypersetup{colorlinks=false,pdfborder={0 0 1}}
+\fi\fi
 
 % advanced citations, references, captions
 \iffootcite
