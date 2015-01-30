@@ -1,13 +1,28 @@
-\NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{RAIF}[2015/01/06 RAIF: Personal LaTeX templates]
-
+\ProvidesClass{RAIF}[2015/01/29 RAIF: Personal XeLaTeX template]
 % cancel compiling if the engine is not XeTeX
 \RequirePackage{iftex}
 \ifXeTeX\else
     \ClassError{RAIF}{Requires XeTeX!}{No LuaTeX, pdfLaTeX, etc.}
 \fi
 
+% class options
 \RequirePackage{xkeyval}
+
+% typography option : allserif (memoir default) / mathserif / titlesans / allsans (beamer default)
+\newif\ifdefaultsans\defaultsansfalse
+\newif\ifmathsans\mathsansfalse
+\newif\iftitlesans\titlesansfalse
+\DeclareOptionX{allserif}{\defaultsansfalse\mathsansfalse\titlesansfalse}
+\DeclareOptionX{mathserif}{\defaultsanstrue\mathsansfalse\titlesansfalse}
+\DeclareOptionX{titlesans}{\defaultsansfalse\mathsansfalse\titlesanstrue}
+\DeclareOptionX{allsans}{\mathsanstrue\defaultsanstrue\titlesansfalse}
+
+% hangul option
+\newif\ifhangul\hangulfalse
+\DeclareOptionX{hangul}{
+    \hangultrue
+    \PassOptionsToPackage{\CurrentOption}{xetexko}
+}
 
 % hyperref option : borderlinks (memoir default) / colorlinks (beamer default) / hidelinks
 \newif\ifcolorlinks\colorlinksfalse
@@ -22,57 +37,16 @@
     \hidelinksfalse\colorlinkstrue
 }
 
-% typography option : allserif (memoir default) / mathserif / titlesans / allsans (beamer default)
-\newif\ifdefaultsans\defaultsansfalse
-\newif\ifmathsans\mathsansfalse
-\newif\iftitlesans\titlesansfalse
-\DeclareOptionX{allserif}{\defaultsansfalse\mathsansfalse\titlesansfalse}
-\DeclareOptionX{mathserif}{\defaultsanstrue\mathsansfalse\titlesansfalse}
-\DeclareOptionX{titlesans}{\defaultsansfalse\mathsansfalse\titlesanstrue}
-\DeclareOptionX{allsans}{\mathsanstrue\defaultsanstrue\titlesansfalse}
-
-% base class : memoir (default) / beamer
-\newcommand{\baseclass}{}
-\newif\ifmemoir\memoirfalse
-\newif\ifbeamer\beamerfalse
-\DeclareOptionX{memoir}{
-    \memoirtrue\beamerfalse
-    \renewcommand{\baseclass}{memoir}
-    \ExecuteOptionsX{allserif}
-    \ExecuteOptionsX{borderlinks}
-}
-\DeclareOptionX{beamer}{
-    \memoirfalse\beamertrue
-    \renewcommand{\baseclass}{beamer}
-    \PassOptionsToClass{notheorems}{\baseclass}
-    \PassOptionsToClass{compress}{\baseclass}
-    \ExecuteOptionsX{allsans}
-    \ExecuteOptionsX{colorlinks}
-    \ExecuteOptionsX{titlepage}
-}
-\ExecuteOptionsX{memoir}
-
-% hangul option
-\newif\ifhangul\hangulfalse
-\DeclareOptionX{hangul}{
-    \hangultrue
-    \PassOptionsToPackage{\CurrentOption}{xetexko}
-}
-
-% some memoir options (e.g. article / oneside) that used in this class
+% some memoir options (article / oneside)
 \newif\ifarticle\articlefalse
 \DeclareOptionX{article}{
-    \ifmemoir
-        \articletrue
-        \PassOptionsToClass{\CurrentOption}{\baseclass}
-    \fi
+    \articletrue
+    \PassOptionsToClass{\CurrentOption}{memoir}
 }
 \newif\ifoneside\onesidefalse
 \DeclareOptionX{oneside}{
-    \ifmemoir
-        \onesidetrue
-        \PassOptionsToClass{\CurrentOption}{\baseclass}
-    \fi
+    \onesidetrue
+    \PassOptionsToClass{\CurrentOption}{memoir}
 }
 
 % beamer section page
@@ -81,14 +55,29 @@
 
 % bibliography options
 \newif\iffootcite\footcitefalse
-\DeclareOptionX{footcite}{
-    \footcitetrue
-}
+\DeclareOptionX{footcite}{\footcitetrue}
 \newif\ifbst\bstfalse
-\DeclareOptionX{bst}[]{
-    \newcommand\bst{#1}
-    \bsttrue
+\DeclareOptionX{bst}[]{\newcommand\bst{#1}\bsttrue}
+
+% base class : memoir (default) / beamer
+\newcommand{\baseclass}{}
+\newif\ifmemoir\memoirfalse
+\DeclareOptionX{memoir}{
+    \memoirtrue
+    \renewcommand{\baseclass}{memoir}
+    \ExecuteOptionsX{allserif}
+    \ExecuteOptionsX{borderlinks}
 }
+\DeclareOptionX{beamer}{
+    \memoirfalse
+    \renewcommand{\baseclass}{beamer}
+    \PassOptionsToClass{notheorems}{\baseclass}
+    \PassOptionsToClass{compress}{\baseclass}
+    \ExecuteOptionsX{allsans}
+    \ExecuteOptionsX{colorlinks}
+    \ExecuteOptionsX{article}
+}
+\ExecuteOptionsX{memoir}
 
 % pass memoir / beamer options
 \DeclareOptionX*{\PassOptionsToClass{\CurrentOption}{\baseclass}}
@@ -161,9 +150,8 @@
         \setsecnumdepth{subsection}
         \settocdepth{subsection}
     \fi
-\fi
 % beamer template
-\ifbeamer
+\else
     \usefonttheme{structurebold}
     \setbeamertemplate{caption}[numbered]
     \setbeamertemplate{theorems}[numbered]
@@ -197,15 +185,15 @@
     \setbeamercolor{block body alerted}{fg=text, bg=danger-bg}
     \setbeamercolor{page number in head/foot}{fg=gray-light}
     \makeatletter
-    \def\th@plain{
-        \def\inserttheoremblockenv{block}
-    }
-    \def\th@definition{
-        \def\inserttheoremblockenv{exampleblock}
-    }
-    \def\th@remark{
-        \def\inserttheoremblockenv{alertblock}
-    }
+        \def\th@plain{
+            \def\inserttheoremblockenv{block}
+        }
+        \def\th@definition{
+            \def\inserttheoremblockenv{exampleblock}
+        }
+        \def\th@remark{
+            \def\inserttheoremblockenv{alertblock}
+        }
     \makeatother
 \fi
 
@@ -215,48 +203,38 @@
 \DeclareMathOperator*{\argmin}{arg\,min}
 \theoremstyle{plain}
 \ifhangul
-    \ifmemoir\ifarticle
+    \ifarticle
         \newtheorem{theorem}{정리}
     \else
         \newtheorem{theorem}{정리}[chapter]
-    \fi\else
-        \newtheorem{theorem}{정리}
     \fi
     \newtheorem{corollary}{따름정리}[theorem]
     \newtheorem{lemma}[theorem]{보조정리}
 \else
-    \ifmemoir\ifarticle
+    \ifarticle
         \newtheorem{theorem}{Theorem}
     \else
         \newtheorem{theorem}{Theorem}[chapter]
-    \fi\else
-        \newtheorem{theorem}{Theorem}
     \fi
     \newtheorem{corollary}{Corollary}[theorem]
     \newtheorem{lemma}[theorem]{Lemma}
 \fi
 \theoremstyle{definition}
 \ifhangul
-    \ifmemoir\ifarticle
+    \ifarticle
         \newtheorem{definition}{정의}
         \newtheorem{example}{예제}
     \else
         \newtheorem{definition}{정의}[chapter]
         \newtheorem{example}{예제}[chapter]
-    \fi\else
-        \newtheorem{definition}{정의}
-        \newtheorem{example}{예제}
     \fi
 \else
-    \ifmemoir\ifarticle
+    \ifarticle
         \newtheorem{definition}{Definition}
         \newtheorem{example}{Example}
     \else
         \newtheorem{definition}{Definition}[chapter]
         \newtheorem{example}{Example}[chapter]
-    \fi\else
-        \newtheorem{definition}{Definition}
-        \newtheorem{example}{Example}
     \fi
 \fi
 \theoremstyle{remark}
@@ -267,37 +245,24 @@
 \fi
 
 % allows using algorithm environment
-\ifmemoir\ifarticle
+\ifarticle
     \RequirePackage{algorithm}
 \else
     \RequirePackage[chapter]{algorithm}
-\fi\else
-    \RequirePackage{algorithm}
 \fi
 \RequirePackage[noend]{algpseudocode}
 \makeatletter
-\ifhangul
-\newcommand\floatc@algo[2]{\setbox\@tempboxa\hbox{\@fs@cfont <#1> #2}%
-    \ifdim\wd\@tempboxa>\hsize \@fs@cfont <#1> #2\par
-    \else\hbox to\hsize{\hfil\box\@tempboxa\hfil}\fi}
-\else
-\newcommand\floatc@algo[2]{\setbox\@tempboxa\hbox{\@fs@cfont #1: #2}%
-    \ifdim\wd\@tempboxa>\hsize \@fs@cfont #1: #2\par
-    \else\hbox to\hsize{\hfil\box\@tempboxa\hfil}\fi}
-\fi
-\newcommand\fs@algo{\def\@fs@cfont{\iftitlesans\sffamily\fi}\let\@fs@capt\floatc@algo
-    \def\@fs@pre{}\def\@fs@post{}
-    \def\@fs@mid{\vspace\abovecaptionskip\relax}
-    \let\@fs@iftopcapt\iffalse}
-\makeatother
-\floatstyle{algo}
-\restylefloat{algorithm}
-\ifhangul
-    \makeatletter
+    \newcommand\fs@algo{
+        \def\@fs@pre{\begin{spacing}{1}}\def\@fs@post{}%
+        \def\@fs@mid{\end{spacing}\vspace\abovecaptionskip\relax}%
+        \let\@fs@iftopcapt\iffalse}
+    \ifhangul
         \renewcommand{\ALG@name}{알고리즘}
         \renewcommand{\listalgorithmname}{\ALG@name~차례}
-    \makeatother
-\fi
+    \fi
+\makeatother
+\floatstyle{algo}
+\restylefloat*{algorithm}
 \ifmemoir
     \newlistof{listofalgorithms}{loa}{\listalgorithmname}
     \newlistentry{algorithm}{loa}{0}
@@ -325,11 +290,14 @@
 \setlist[itemize,3]{label=$\ast$}
 \setlist[itemize,4]{label=$\cdot$}
 
+% vertical space options
+\RequirePackage{setspace}
+
 % hyperlink option
 \ifmemoir
     \RequirePackage{hyperref}
     \hypersetup{linkcolor=danger}
-\fi\ifbeamer
+\else
     \hypersetup{linkcolor=text}
 \fi
 \hypersetup {
@@ -409,99 +377,50 @@
 \crefname{figure}{figure}{figures}
 \Crefname{figure}{Figure}{Figures}
 \crefname{equation}{equation}{equations}
-\Crefname{equation}{Equation}{Equations} 
+\Crefname{equation}{Equation}{Equations}
 \crefname{lstlisting}{listing}{listings}
 \Crefname{lstlisting}{Listing}{Listings}
 \ifhangul
-    \RequirePackage{ulem}
-    \makeatletter
-        \ifmemoir
-            \captionnamefont{<}
-            \captiondelim{> }
-            \footmarkstyle{#1) }
-        \fi\ifbeamer
-            \RequirePackage{caption}
-            \DeclareCaptionLabelFormat{hangul}{<#1 #2>}
-            \captionsetup{labelformat=hangul,labelsep=space}
-            \renewcommand{\@makefntext}[1]{\noindent\makebox[1.5em][r]\@thefnmark) #1}
-        \fi
-    \makeatother
     \crefname{figure}{그림}{그림}
-    \Crefname{figure}{그림}{그림}
     \crefname{table}{표}{표}
-    \Crefname{table}{표}{표}
     \crefformat{part}{#2#1#3편}
-    \Crefformat{part}{#2#1#3편}
     \crefmultiformat{part}%
         {#2#1#3편}{\와 #2#1#3편}{, #2#1#3편}{\와 #2#1#3편}
     \crefrangemultiformat{part}%
         {#3#1#4--#5#2#6편}{\와 #3#1#4--#5#2#6편}{, #3#1#4--#5#2#6편}{\와 #3#1#4--#5#2#6편}
-    \Crefmultiformat{part}%
-        {#2#1#3편}{\와 #2#1#3편}{, #2#1#3편}{\와 #2#1#3편}
-    \Crefrangemultiformat{part}%
-        {#3#1#4--#5#2#6편}{\와 #3#1#4--#5#2#6편}{, #3#1#4--#5#2#6편}{\와 #3#1#4--#5#2#6편}
     \crefname{appendix}{부록}{부록}
-    \Crefname{appendix}{부록}{부록}
     \crefname{equation}{식}{식}
-    \Crefname{equation}{식}{식} 
     \crefname{item}{항목}{항목}
-    \Crefname{item}{항목}{항목}
     \crefformat{chapter}{#2#1#3장}
-    \Crefformat{chapter}{#2#1#3장}
     \crefmultiformat{chapter}%
         {#2#1#3장}{\와 #2#1#3장}{, #2#1#3장}{\와 #2#1#3장}
     \crefrangemultiformat{chapter}%
-        {#3#1#4--#5#2#6장}{\와 #3#1#4--#5#2#6장}{, #3#1#4--#5#2#6장}{\와 #3#1#4--#5#2#6장}
-    \Crefmultiformat{chapter}%
-        {#2#1#3장}{\와 #2#1#3장}{, #2#1#3장}{\와 #2#1#3장}
-    \Crefrangemultiformat{chapter}%
         {#3#1#4--#5#2#6장}{\와 #3#1#4--#5#2#6장}{, #3#1#4--#5#2#6장}{\와 #3#1#4--#5#2#6장}
     \crefmultiformat{section}%
         {\S#2#1#3}{\와 \S#2#1#3}{, \S#2#1#3}{\와 \S#2#1#3}
     \crefrangemultiformat{section}%
         {\S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--\S#5#2#6}{, \S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--#5#2#6}
-    \Crefmultiformat{section}%
-        {\S#2#1#3}{\와 \S#2#1#3}{, \S#2#1#3}{\와 \S#2#1#3}
-    \Crefrangemultiformat{section}%
-        {\S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--\S#5#2#6}{, \S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--#5#2#6}
-    \crefmultiformat{section}%
+    \crefmultiformat{subsection}%
         {\S#2#1#3}{\와 \S#2#1#3}{, \S#2#1#3}{\와 \S#2#1#3}
     \crefrangemultiformat{subsection}%
-        {\S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--\S#5#2#6}{, \S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--#5#2#6}
-    \Crefmultiformat{subsection}%
-        {\S#2#1#3}{\와 \S#2#1#3}{, \S#2#1#3}{\와 \S#2#1#3}
-    \Crefrangemultiformat{subsection}%
         {\S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--\S#5#2#6}{, \S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--#5#2#6}
     \crefmultiformat{subsubsection}%
         {\S#2#1#3}{\와 \S#2#1#3}{, \S#2#1#3}{\와 \S#2#1#3}
     \crefrangemultiformat{subsubsection}%
         {\S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--\S#5#2#6}{, \S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--#5#2#6}
-    \Crefmultiformat{subsubsection}%
-        {\S#2#1#3}{\와 \S#2#1#3}{, \S#2#1#3}{\와 \S#2#1#3}
-    \Crefrangemultiformat{subsubsection}%
-        {\S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--\S#5#2#6}{, \S#3#1#4--\S#5#2#6}{\와 \S#3#1#4--#5#2#6}
     \crefname{theorem}{정리}{정리}
-    \Crefname{theorem}{정리}{정리}
     \crefname{lemma}{보조정리}{보조정리}
-    \Crefname{lemma}{보조정리}{보조정리}
     \crefname{corollary}{따름정리}{따름정리}
-    \Crefname{corollary}{따름정리}{따름정리}
     \crefname{definition}{정의}{정의}
-    \Crefname{definition}{정의}{정의}
     \crefname{example}{예제}{예제}
-    \Crefname{example}{예제}{예제}
     \crefformat{page}{#2#1#3~페이지}
-    \Crefformat{page}{#2#1#3~페이지}
     \crefmultiformat{page}%
         {#2#1#3~페이지}{\와~#2#1#3~페이지}{, #2#1#3~페이지}{\와~#2#1#3~페이지}
     \crefrangemultiformat{page}%
         {#3#1#4--#5#2#6~페이지}{\와~#3#1#4--#5#2#6~페이지}{, #3#1#4--#5#2#6~페이지}{\와~#3#1#4--#5#2#6~페이지}
     \crefname{footnote}{각주}{각주}
-    \Crefname{footnote}{각주}{각주}
     \crefname{lstlisting}{소스코드}{소스코드}
-    \Crefname{lstlisting}{소스코드}{소스코드}
     \crefname{algorithm}{알고리즘}{알고리즘}
-    \Crefname{algorithm}{알고리즘}{알고리즘}
     \newcommand{\crefpairconjunction}{\와 }
     \newcommand{\creflastconjunction}{\와 }
     \newcommand{\crefpairgroupconjunction}{\와 }
@@ -521,6 +440,23 @@
     \newlistentry{lstlisting}{lol}{0}
 \fi
 \makeatletter
+    \long\def\@makecaption#1#2{%
+        \newskip\abovecaptionskip
+        \newskip\belowcaptionskip
+        \setlength\abovecaptionskip{7pt}
+        \setlength\belowcaptionskip{7pt}
+        \def\insertcaptionname{\lstlistingname}%
+        \def\insertcaptionnumber{\thelstlisting}%
+        \def\insertcaption{#2}
+        \nobreak\vskip\abovecaptionskip\nobreak
+        \sbox\@tempboxa{\usebeamertemplate**{caption}}%
+        \ifdim \wd\@tempboxa >\hsize
+            \usebeamertemplate**{caption}\par
+        \else
+            \global \@minipagefalse
+            \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+        \fi
+        \nobreak\vskip\belowcaptionskip\nobreak}
     \let\c@lstlisting\@undefined
 \makeatother
 % default styles : memoir / beamer
@@ -566,7 +502,7 @@
     \renewcommand{\lstcodebg}{background}
     \renewcommand{\lstkbdstyle}{memoir-inline}
     \renewcommand{\lstkbdbg}{background}
-\fi\ifbeamer
+\else
     \renewcommand{\lststyle}{beamer}
     \renewcommand{\lstcodestyle}{beamer-code}
     \renewcommand{\lstcodebg}{code-bg}
@@ -596,18 +532,18 @@
 }
 \newcommand\code[2][]{
     \tikz[overlay]\node[
-        fill=\lstcodebg, inner sep=0.5ex,
-        text depth=0.2ex, text height=1.25ex,
-        anchor=text, rectangle, rounded corners=1mm]
-        {\lstinline[style=\lstcodestyle]§#2§};
+    fill=\lstcodebg, inner sep=0.5ex,
+    text depth=0.2ex, text height=1.25ex,
+    anchor=text, rectangle, rounded corners=1mm]
+    {\lstinline[style=\lstcodestyle]§#2§};
     \phantom{\lstinline§#2§\hskip-.8ex}
 }
 \newcommand\kbd[2][]{
     \tikz[overlay]\node[
-        fill=\lstkbdbg, inner sep=0.5ex,
-        text depth=0.2ex, text height=1.25ex,
-        anchor=text, rectangle, rounded corners=1mm]
-        {\lstinline[style=\lstkbdstyle]§#2§};
+    fill=\lstkbdbg, inner sep=0.5ex,
+    text depth=0.2ex, text height=1.25ex,
+    anchor=text, rectangle, rounded corners=1mm]
+    {\lstinline[style=\lstkbdstyle]§#2§};
     \phantom{\lstinline§#2§\hskip-.8ex}
 }
 
@@ -620,7 +556,7 @@
 \ifmathsans
     \RequirePackage{eulervm}
     \RequirePackage[helvet,slantedGreek]{sfmath}
-\else\ifbeamer
+\else\ifmemoir\else
     \renewcommand{\mathfamilydefault}{\rmdefault}
 \fi\fi
 \iftitlesans
@@ -686,13 +622,13 @@
         \let\oldabstractnamefont\abstractnamefont
         \renewcommand*{\abstractnamefont}{\oldabstractnamefont\sffamily}
         \precaption{\sffamily}
-        \captiontitlefont{\sffamily}
-        \makeatletter
-        \makeatother
-    \fi\ifbeamer
-        \setbeamerfont{structure}{series=\bfseries\sffamily}
-        \setbeamerfont{tiny structure}{series=\bfseries\sffamily}
-        \setbeamerfont{block title}{size={}}
+        % \captiontitlefont{\sffamily}
+    \else
+        \setbeamerfont{structure}{family=\sffamily}
+        \setbeamerfont{tiny structure}{family=\sffamily}
+        \setbeamerfont{author}{family=\sffamily}
+        \setbeamerfont{institute}{family=\sffamily}
+        \setbeamerfont{date}{family=\sffamily}
     \fi
 \fi
 \RequirePackage{fontspec}
@@ -733,6 +669,9 @@
 ]{KoPubDotum_Pro}
 \hanjabyhangulfont
 \ifhangul\ifmemoir
+    \captionnamefont{<}
+    \captiondelim{> }
+    \footmarkstyle{#1) }
     \AtBeginDocument{
         \renewcommand{\partname}{}
         \renewcommand{\partnamenum}[1]{제~#1~편}
@@ -742,6 +681,12 @@
         \fi
         \renewcommand{\abstractname}{초~록}
     }
+\else
+    \setbeamerfont{caption name}{family=<}
+    \setbeamertemplate{caption label separator}{>}
+    \makeatletter
+        \renewcommand{\@makefntext}[1]{\noindent\makebox[1.5em][r]\@thefnmark) #1}
+    \makeatother
 \fi\fi
 
 % \titlepage design
@@ -778,7 +723,7 @@
             \emptythanks
         \end{titlingpage}}
     \makeatother
-\fi\ifbeamer
+\else
     \setbeamertemplate{title page}{
         \makebox[\textwidth][c]{\begin{tikzpicture}
             \useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
