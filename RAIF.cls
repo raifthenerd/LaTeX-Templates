@@ -252,16 +252,16 @@
 \fi
 \RequirePackage[noend]{algpseudocode}
 \makeatletter
-    \newcommand\fs@algo{
-        \def\@fs@pre{\begin{spacing}{1}}\def\@fs@post{}%
-        \def\@fs@mid{\end{spacing}\vspace\abovecaptionskip\relax}%
-        \let\@fs@iftopcapt\iffalse}
+    %\newcommand\fs@algo{
+    %    \def\@fs@pre{\begin{spacing}{1}}\def\@fs@post{}%
+    %    \def\@fs@mid{\end{spacing}\vspace\abovecaptionskip\relax}%
+    %    \let\@fs@iftopcapt\iffalse}
     \ifhangul
         \renewcommand{\ALG@name}{알고리즘}
         \renewcommand{\listalgorithmname}{\ALG@name~차례}
     \fi
 \makeatother
-\floatstyle{algo}
+\floatstyle{plain}
 \restylefloat*{algorithm}
 \ifmemoir
     \newlistof{listofalgorithms}{loa}{\listalgorithmname}
@@ -291,6 +291,7 @@
 \setlist[itemize,4]{label=$\cdot$}
 
 % vertical space options
+\DisemulatePackage{setspace}
 \RequirePackage{setspace}
 
 % hyperlink option
@@ -381,6 +382,10 @@
 \crefname{lstlisting}{listing}{listings}
 \Crefname{lstlisting}{Listing}{Listings}
 \ifhangul
+    \renewcommand\Cref{\cref}
+    \renewcommand\Crefrange{\crefrange}
+    \renewcommand\Cpageref{\cpageref}
+    \renewcommand\Cpagerefrange{\cpagerefrange}
     \crefname{figure}{그림}{그림}
     \crefname{table}{표}{표}
     \crefformat{part}{#2#1#3편}
@@ -440,23 +445,25 @@
     \newlistentry{lstlisting}{lol}{0}
 \fi
 \makeatletter
-    \long\def\@makecaption#1#2{%
+    \ifmemoir\else
         \newskip\abovecaptionskip
         \newskip\belowcaptionskip
         \setlength\abovecaptionskip{7pt}
         \setlength\belowcaptionskip{7pt}
-        \def\insertcaptionname{\lstlistingname}%
-        \def\insertcaptionnumber{\thelstlisting}%
-        \def\insertcaption{#2}
-        \nobreak\vskip\abovecaptionskip\nobreak
-        \sbox\@tempboxa{\usebeamertemplate**{caption}}%
-        \ifdim \wd\@tempboxa >\hsize
-            \usebeamertemplate**{caption}\par
-        \else
-            \global \@minipagefalse
-            \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
-        \fi
-        \nobreak\vskip\belowcaptionskip\nobreak}
+        \long\def\@makecaption#1#2{%
+            \def\insertcaptionname{\lstlistingname}%
+            \def\insertcaptionnumber{\thelstlisting}%
+            \def\insertcaption{#2}
+            \nobreak\vskip\abovecaptionskip\nobreak
+            \sbox\@tempboxa{\usebeamertemplate**{caption}}%
+            \ifdim \wd\@tempboxa >\hsize
+                \usebeamertemplate**{caption}\par
+            \else
+                \global \@minipagefalse
+                \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+            \fi
+            \nobreak\vskip\belowcaptionskip\nobreak}
+    \fi
     \let\c@lstlisting\@undefined
 \makeatother
 % default styles : memoir / beamer
@@ -518,8 +525,10 @@
     stepnumber=1,
     breaklines=true,
     breakindent=12pt,
-    aboveskip=\floatsep,
-    belowskip=\floatsep,
+    aboveskip=\intextsep,
+    belowskip=\intextsep,
+    abovecaptionskip=\abovecaptionskip,
+    belowcaptionskip=\belowcaptionskip,
     xleftmargin=16pt,
     captionpos=b,
     showspaces=false,
@@ -622,7 +631,7 @@
         \let\oldabstractnamefont\abstractnamefont
         \renewcommand*{\abstractnamefont}{\oldabstractnamefont\sffamily}
         \precaption{\sffamily}
-        % \captiontitlefont{\sffamily}
+        \captiontitlefont{\normalfont}
     \else
         \setbeamerfont{structure}{family=\sffamily}
         \setbeamerfont{tiny structure}{family=\sffamily}
@@ -672,14 +681,25 @@
     \captionnamefont{<}
     \captiondelim{> }
     \footmarkstyle{#1) }
+    \makeatletter
+        \let\oldappendix\appendix
+        \renewcommand*\appendix{
+            \oldappendix
+            \renewcommand{\chapternamenum}{\oldchapternamenum}}
+    \makeatother
     \AtBeginDocument{
+        \renewcommand{\bookname}{}
+        \renewcommand{\booknamenum}[1]{제~#1~권}
         \renewcommand{\partname}{}
         \renewcommand{\partnamenum}[1]{제~#1~편}
         \ifarticle\else
             \renewcommand{\chaptername}{}
+            \let\oldchapternamenum\chapternamenum
             \renewcommand{\chapternamenum}[1]{제~#1~장}
         \fi
         \renewcommand{\abstractname}{초~록}
+        \renewcommand{\appendixpagename}{부~록}
+        \renewcommand{\appendixtocname}{부~록}
     }
 \else
     \setbeamerfont{caption name}{family=<}
@@ -708,9 +728,9 @@
             \ifoneside\centering\fi
             \vspace*{\droptitle}
             \vspace*{\baselineskip}
-            \begin{Spacing}{1.1}
+            \begin{spacing}{1.1}
                 \noindent\Huge\textbf\@title
-            \end{Spacing}
+            \end{spacing}
             \noindent\large\textit\subt\\[3\baselineskip]
             \noindent\Large\textsc\@author\par
             \vfill
