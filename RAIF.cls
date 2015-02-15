@@ -1,3 +1,4 @@
+
 \ProvidesClass{RAIF}[2015/01/29 RAIF: Personal XeLaTeX template]
 % cancel compiling if the engine is not XeTeX
 \RequirePackage{iftex}
@@ -296,6 +297,98 @@
 % vertical space options
 \DisemulatePackage{setspace}
 \RequirePackage{setspace}
+
+% Creative Commons License:  by / by-sa / by-nd / by-nc / by-nc-sa / by-nc-nd
+\RequirePackage{xstring}
+\makeatletter
+\def\ccl@option#1{\csname @ccl@#1 \endcsname}
+\providecommand\@ccl@license{by}
+\ifhangul
+\providecommand\@ccl@features{저작자표시}
+\providecommand\@ccl@title{이 저작물}
+\else
+\providecommand\@ccl@features{Attribution}
+\providecommand\@ccl@title{This work}
+\fi
+\providecommand\@ccl@author{}
+\providecommand\@ccl@version{4.0}
+\define@key{cclsetup}{title}{
+  \def\@ccl@title{#1}
+}
+\define@key{cclsetup}{author}{
+  \ifhangul
+  \def\@ccl@author{#1의 저작물인}
+  \else
+  \def\@ccl@author{by #1}
+  \fi
+}
+\define@key{cclsetup}{license}{
+  \IfStrEqCase{#1}{
+    {by}{
+      \ifhangul
+        \def\@ccl@features{저작자표시}
+      \else
+        \def\@ccl@feature{Attribution}
+      \fi
+    }
+    {by-sa}{
+      \ifhangul
+        \def\@ccl@features{저작자표시-동일조건변경허락}
+      \else
+        \def\@ccl@features{Attribution-ShareAlike}
+      \fi
+    }
+    {by-nd}{
+      \ifhangul
+        \def\@ccl@features{저작자표시-변경금지}
+      \else
+        \def\@ccl@features{Attribution-NoDerivs}
+      \fi
+    }
+    {by-nc}{
+      \ifhangul
+        \def\@ccl@features{저작자표시-비영리}
+      \else
+        \def\@ccl@features{Attribution-NonCommercial }
+      \fi
+    }
+    {by-nc-sa}{
+      \ifhangul
+        \def\@ccl@features{저작자표시-비영리-동일조건변경허락}
+      \else
+        \def\@ccl@features{Attribution-NonCommercial-ShareAlike}
+      \fi
+    }
+    {by-nc-nd}{
+      \ifhangul
+        \def\@ccl@features{저작자표시-비영리-변경금지}
+      \else
+        \def\@ccl@features{Attribution-NonCommercial-NoDerivs}
+      \fi
+    }}[\ClassError{RAIF}{Wrong CCL! choose one of: by / by-sa / by-nd / by-nc / by-nc-sa / by-nc-nd}{More infos on http://creativecommons.org/licenses/}]
+  \def\@ccl@license{#1}
+}
+\define@key{cclsetup}{version}{
+  \IfDecimal{#1}
+    {\def\@ccl@version{#1}}
+    {\ClassError{RAIF}{CCL Version must be decimal!}{Check out setccl command}}
+}
+\newcommand{\setlicense}[1]{
+  \setkeys{cclsetup}{#1}
+  \newcommand{\ccl}{CC \MakeUppercase{\@ccl@license} \@ccl@version}
+  \newcommand{\cclbutton}[1][2]{
+    \includegraphics[keepaspectratio=true,height=##1 em]{_ccl/\@ccl@license}
+  }
+  \newcommand{\cclurl}{\url{http://creativecommons.org/licenses/\@ccl@license/\@ccl@version/}}
+  \ifhangul
+    \newcommand{\ccltext}{크리에이티브 커먼즈 {\@ccl@features} {\@ccl@version} 국제 라이선스}
+    \newcommand{\cclexplain}{{\@ccl@author} {\@ccl@title}에는 {\ccltext}가 적용 되어 있습니다. 이 라이선스의 설명을 보고 싶으시면 {\cclurl}을 참조하세요.}
+  \else
+    \newcommand{\ccltext}{Creative Commons {\@ccl@features} {\@ccl@version} International License}
+    \newcommand{\cclexplain}{{\@ccl@title} {\@ccl@author} is licensed under the {\ccltext}. To view a copy of this license, visit {\cclurl}.}
+  \fi
+}
+\makeatother
 
 % hyperlink option
 \ifmemoir
