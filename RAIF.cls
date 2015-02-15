@@ -300,72 +300,58 @@
 \RequirePackage{setspace}
 
 % Creative Commons License:  by / by-sa / by-nd / by-nc / by-nc-sa / by-nc-nd
-\RequirePackage{xstring}
+\RequirePackage{atenddvi,xstring}
 \makeatletter
 \def\ccl@option#1{\csname @ccl@#1 \endcsname}
 \providecommand\@ccl@license{by}
-\ifhangul
-\providecommand\@ccl@features{저작자표시}
-\providecommand\@ccl@title{이 저작물}
-\else
 \providecommand\@ccl@features{Attribution}
-\providecommand\@ccl@title{This work}
-\fi
-\providecommand\@ccl@author{}
+\providecommand\@ccl@features@ko{저작자표시}
 \providecommand\@ccl@version{4.0}
+\providecommand\@ccl@title{}
+\providecommand\@ccl@author{}
+\providecommand\@ccl@authorurl{}
+\providecommand\@ccl@source{}
+\providecommand\@ccl@morepermissions{}
 \define@key{cclsetup}{title}{
   \def\@ccl@title{#1}
 }
 \define@key{cclsetup}{author}{
-  \ifhangul
-  \def\@ccl@author{#1의 저작물인}
-  \else
-  \def\@ccl@author{by #1}
-  \fi
+  \def\@ccl@author{#1}
+}
+\define@key{cclsetup}{authorurl}{
+  \def\@ccl@authorurl{#1}
+}
+\define@key{cclsetup}{source}{
+  \def\@ccl@source{#1}
+}
+\define@key{cclsetup}{morepermissions}{
+  \def\@ccl@morepermissions{#1}
 }
 \define@key{cclsetup}{license}{
   \IfStrEqCase{#1}{
     {by}{
-      \ifhangul
-        \def\@ccl@features{저작자표시}
-      \else
-        \def\@ccl@feature{Attribution}
-      \fi
+      \def\@ccl@features@ko{저작자표시}
+      \def\@ccl@features{Attribution}
     }
     {by-sa}{
-      \ifhangul
-        \def\@ccl@features{저작자표시-동일조건변경허락}
-      \else
-        \def\@ccl@features{Attribution-ShareAlike}
-      \fi
+      \def\@ccl@features@ko{저작자표시-동일조건변경허락}
+      \def\@ccl@features{Attribution-ShareAlike}
     }
     {by-nd}{
-      \ifhangul
-        \def\@ccl@features{저작자표시-변경금지}
-      \else
-        \def\@ccl@features{Attribution-NoDerivs}
-      \fi
+      \def\@ccl@features@ko{저작자표시-변경금지}
+      \def\@ccl@features{Attribution-NoDerivs}
     }
     {by-nc}{
-      \ifhangul
-        \def\@ccl@features{저작자표시-비영리}
-      \else
-        \def\@ccl@features{Attribution-NonCommercial }
-      \fi
+        \def\@ccl@features@ko{저작자표시-비영리}
+        \def\@ccl@features{Attribution-NonCommercial}
     }
     {by-nc-sa}{
-      \ifhangul
-        \def\@ccl@features{저작자표시-비영리-동일조건변경허락}
-      \else
+        \def\@ccl@features@ko{저작자표시-비영리-동일조건변경허락}
         \def\@ccl@features{Attribution-NonCommercial-ShareAlike}
-      \fi
     }
     {by-nc-nd}{
-      \ifhangul
-        \def\@ccl@features{저작자표시-비영리-변경금지}
-      \else
+        \def\@ccl@features@ko{저작자표시-비영리-변경금지}
         \def\@ccl@features{Attribution-NonCommercial-NoDerivs}
-      \fi
     }}[\ClassError{RAIF}{Wrong CCL! choose one of: by / by-sa / by-nd / by-nc / by-nc-sa / by-nc-nd}{More infos on http://creativecommons.org/licenses/}]
   \def\@ccl@license{#1}
 }
@@ -374,6 +360,11 @@
     {\def\@ccl@version{#1}}
     {\ClassError{RAIF}{CCL Version must be decimal!}{Check out setccl command}}
 }
+\bgroup
+  \catcode`\#=11
+  \gdef\@ccl@hash{#}
+\egroup
+\newwrite\xmpmetadata
 \newcommand{\setlicense}[1]{
   \setkeys{cclsetup}{#1}
   \newcommand{\ccl}{CC \MakeUppercase{\@ccl@license} \@ccl@version}
@@ -382,12 +373,127 @@
   }
   \newcommand{\cclurl}{\url{http://creativecommons.org/licenses/\@ccl@license/\@ccl@version/}}
   \ifhangul
-    \newcommand{\ccltext}{크리에이티브 커먼즈 {\@ccl@features} {\@ccl@version} 국제 라이선스}
-    \newcommand{\cclexplain}{{\@ccl@author} {\@ccl@title}에는 {\ccltext}가 적용 되어 있습니다. 이 라이선스의 설명을 보고 싶으시면 {\cclurl}을 참조하세요.}
+    \newcommand{\ccltext}{
+      크리에이티브 커먼즈 \@ccl@features@ko\space\@ccl@version\space 국제 라이선스}
+    \newcommand{\cclexplain}{
+      \IfStrEq{\@ccl@author}{}{}{\@ccl@author 의 저작물인}\space
+      \IfStrEq{\@ccl@title}{}{이 저작물}{\@ccl@title} 에는 \ccltext 가 적용 되어 있습니다.
+      이 라이선스의 설명을 보고 싶으시면 \cclurl 을 참조하세요.}
   \else
-    \newcommand{\ccltext}{Creative Commons {\@ccl@features} {\@ccl@version} International License}
-    \newcommand{\cclexplain}{{\@ccl@title} {\@ccl@author} is licensed under the {\ccltext}. To view a copy of this license, visit {\cclurl}.}
+    \newcommand{\ccltext}{
+      Creative Commons \@ccl@features\space\@ccl@version\space International License}
+    \newcommand{\cclexplain}{
+      \IfStrEq{\@ccl@title}{}{This work}{\@ccl@title}\space
+      \IfStrEq{\@ccl@author}{}{}{by \@ccl@author}\space
+      is licensed under the \ccltext. To view a copy of this license, visit \cclurl.}
   \fi
+  \AtEndDvi{
+    \newcommand*{\@add@to@xml}[1]{
+      \bgroup
+        \@tempcnta=0
+        \loop
+          \lccode\@tempcnta=\@tempcnta
+          \advance\@tempcnta by 1
+          \ifnum\@tempcnta<256
+        \repeat
+        \lccode`\_=`\ \relax
+        \lowercase{\xdef\@ccl@xml{\@ccl@xml##1}}
+      \egroup
+    }
+    \bgroup
+    \xdef\@ccl@xml{}
+    \@add@to@xml{%
+__________________________________________________^^J%
+    }
+    \xdef\@ccl@padding{\@ccl@xml}
+    \egroup
+    \xdef\@ccl@padding{\@ccl@padding\@ccl@padding}
+    \xdef\@ccl@padding{\@ccl@padding\@ccl@padding}
+    \xdef\@ccl@padding{\@ccl@padding\@ccl@padding}
+    \xdef\@ccl@padding{\@ccl@padding\@ccl@padding}
+    \xdef\@ccl@padding{\@ccl@padding\@ccl@padding}
+
+    \@add@to@xml{%
+<?xpacket begin='' id=''?>^^J%
+<x:xmpmeta xmlns:x='adobe:ns:meta/'>^^J%
+__<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns\@ccl@hash'>^^J%
+____<rdf:Description rdf:about=''^^J%
+_____________xmlns:xapRights='http://ns.adobe.com/xap/1.0/rights/'>^^J%
+______<xapRights:Marked>True</xapRights:Marked>^^J%
+____</rdf:Description>^^J%
+    }
+
+    \IfStrEq{\@ccl@authorurl}{}{}{\@add@to@xml{%
+____<rdf:Description rdf:about=''^^J%
+_____________xmlns:xapRights='http://ns.adobe.com/xap/1.0/rights/'>^^J%
+______<xapRights:WebStatement rdf:resource='\@ccl@authorurl'/>^^J%
+____</rdf:Description>^^J%
+    }}
+
+    \@add@to@xml{%
+____<rdf:Description rdf:about=''^^J%
+_____________xmlns:xapRights='http://ns.adobe.com/xap/1.0/rights/'^^J%
+_____________>^^J%
+______<xapRights:UsageTerms>^^J%
+____<rdf:Alt>^^J%
+______<rdf:li xml:lang='x-default' >This work is licensed under a &lt;a rel=&\@ccl@hash34;license&\@ccl@hash34; href=&\@ccl@hash34;http://creativecommons.org/licenses/\@ccl@license/\@ccl@version/&\@ccl@hash34;&gt;Creative Commons \@ccl@features\space\@ccl@version\space International License&lt;/a&gt;.</rdf:li>^^J%
+______<rdf:li xml:lang='en' >This work is licensed under a &lt;a rel=&\@ccl@hash34;license&\@ccl@hash34; href=&\@ccl@hash34;http://creativecommons.org/licenses/\@ccl@license/\@ccl@version/&\@ccl@hash34;&gt;Creative Commons \@ccl@features\space\@ccl@version\space International License&lt;/a&gt;.</rdf:li>^^J%
+______</rdf:Alt>^^J%
+______</xapRights:UsageTerms>^^J%
+____</rdf:Description>^^J%
+    }
+
+    \IfStrEq{\@ccl@title}{}{}{\@add@to@xml{%
+____<rdf:Description rdf:about=''^^J%
+_____________xmlns:dc='http://purl.org/dc/elements/1.1/'>^^J%
+______<dc:title>^^J%
+____<rdf:Alt>^^J%
+______<rdf:li xml:lang='x-default'>\@ccl@title</rdf:li>^^J%
+______<rdf:li xml:lang='en'>\@ccl@title</rdf:li>^^J%
+____</rdf:Alt>^^J%
+______</dc:title>^^J%
+____</rdf:Description>^^J%
+    }}
+
+    \@add@to@xml{%
+____<rdf:Description rdf:about=''^^J%
+______xmlns:cc='http://creativecommons.org/ns\@ccl@hash'>^^J%
+______<cc:license rdf:resource='http://creativecommons.org/licenses/\@ccl@license/\@ccl@version'/>^^J%
+____</rdf:Description>^^J%
+    }
+
+    \IfStrEq{\@ccl@author}{}{}{\@add@to@xml{%
+____<rdf:Description rdf:about=''^^J%
+______xmlns:cc='http://creativecommons.org/ns\@ccl@hash'>^^J%
+______<cc:attributionName>\@ccl@author</cc:attributionName>^^J%
+____</rdf:Description>^^J%
+    }}
+
+    \IfStrEq{\@ccl@morepermissions}{}{}{\@add@to@xml{%
+____<rdf:Description rdf:about=''^^J%
+______xmlns:cc='http://creativecommons.org/ns\@ccl@hash'>^^J%
+______<cc:morePermissions rdf:resource='\@ccl@morepermissions'/>^^J%
+____</rdf:Description>^^J%
+    }}
+
+    \@add@to@xml{%
+__</rdf:RDF>^^J%
+</x:xmpmeta>^^J%
+\@ccl@padding
+<?xpacket end='w'?>^^J%
+    }
+    \special{pdf:stream @creativecommons (\@ccl@xml)
+      <<
+        /Type /Metadata
+        /Subtype /XML
+      >>
+    }
+    \special{pdf:put @catalog
+      <<
+        /Metadata @creativecommons
+      >>
+    }
+  }
 }
 \makeatother
 
@@ -400,10 +506,8 @@
 \fi
 \hypersetup {
     breaklinks,
-    pdfusetitle,
     pdfencoding=auto,
     pdfstartview={FitH},
-    bookmarks=true,
     linkbordercolor=danger,
     citebordercolor=success,
     urlbordercolor=primary,
@@ -411,6 +515,14 @@
     urlcolor=primary,
     filecolor=info,
 }
+\makeatletter
+\AtBeginDocument{
+  \hypersetup{
+    pdftitle={\@title},
+    pdfauthor={\@author},
+  }
+}
+\makeatother
 \ifhidelinks
     \hypersetup{hidelinks}
 \else\ifcolorlinks
