@@ -1,4 +1,5 @@
 
+
 \ProvidesClass{RAIF}[2015/01/29 RAIF: Personal XeLaTeX template]
 % cancel compiling if the engine is not XeTeX
 \RequirePackage{iftex}
@@ -377,7 +378,7 @@
   \setkeys{cclsetup}{#1}
   \newcommand{\ccl}{CC \MakeUppercase{\@ccl@license} \@ccl@version}
   \newcommand{\cclbutton}[1][2]{
-    \includegraphics[keepaspectratio=true,height=##1 em]{_ccl/\@ccl@license}
+    \includegraphics[keepaspectratio=true,height=##1 em]{_assets/ccl/\@ccl@license}
   }
   \newcommand{\cclurl}{\url{http://creativecommons.org/licenses/\@ccl@license/\@ccl@version/}}
   \ifhangul
@@ -745,7 +746,7 @@
 \RequirePackage{fontspec}
 \defaultfontfeatures[\rmfamily,\sffamily]{Ligatures=TeX}
 \setsansfont[
-    Path=_fonts/TeX Gyre/,
+    Path=_assets/fonts/TeX Gyre/,
     Scale=MatchUppercase,
     UprightFont={*-regular.otf},
     ItalicFont={*-italic.otf},
@@ -756,14 +757,14 @@
 % korean option
 \RequirePackage{xetexko}
 \setmainhangulfont[
-    Path=_fonts/KoPub/,
+    Path=_assets/fonts/KoPub/,
     UprightFont={* Light.otf},
     ItalicFont={* Light.otf}, ItalicFeatures={FakeSlant=.367},
     BoldFont={* Bold.otf},
     BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
 ]{KoPubBatang_Pro}
 \setsanshangulfont[
-    Path=_fonts/KoPub/,
+    Path=_assets/fonts/KoPub/,
     Scale=MatchUppercase,
     UprightFont={* Medium.otf},
     ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.367},
@@ -771,7 +772,7 @@
     BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
 ]{KoPubDotum_Pro}
 \setmonohangulfont[
-    Path=_fonts/KoPub/,
+    Path=_assets/fonts/KoPub/,
     Scale=MatchLowercase,
     UprightFont={* Medium.otf},
     ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.367},
