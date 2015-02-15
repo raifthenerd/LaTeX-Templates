@@ -1,14 +1,13 @@
 LATEX=latexmk
-SOURCE:=$(wildcard *.tex)
 
-DFFLAG=-xelatex -interaction=nonstopmode
+DFFLAG=-xelatex -interaction=nonstopmode -outdir=output
 RFLAG=-quiet
 DFLAG=-pv
 
 debug:
-	$(LATEX) $(DFFLAG) $(DFLAG) $(SOURCE)
+	$(LATEX) $(DFFLAG) $(DFLAG)
 release:
-	$(LATEX) $(DFFLAG) $(RFLAG) $(SOURCE)
+	$(LATEX) $(DFFLAG) $(RFLAG)
 	$(LATEX) -c
 clean:
 	$(LATEX) -C
