@@ -1,14 +1,14 @@
 LATEX=latexmk
-TARGET=main.pdf
+SOURCE:=$(wildcard *.tex)
 
 DFFLAG=-xelatex -interaction=nonstopmode
 RFLAG=-quiet
 DFLAG=-pv
 
 debug:
-	$(LATEX) $(DFFLAG) $(DFLAG) $(TARGET:.pdf=.tex)
+	$(LATEX) $(DFFLAG) $(DFLAG) $(SOURCE)
 release:
-	$(LATEX) $(DFFLAG) $(RFLAG) $(TARGET:.pdf=.tex)
+	$(LATEX) $(DFFLAG) $(RFLAG) $(SOURCE)
 	$(LATEX) -c
 clean:
 	$(LATEX) -C
