@@ -1,3 +1,4 @@
+
 \ProvidesClass{xmbk}[2015/02/16 xmbk: XeLaTeX + memoir + beamer + koTeX (for personal template)]
 % cancel compiling if the engine is not XeTeX
 \RequirePackage{iftex}
@@ -797,6 +798,8 @@ __</rdf:RDF>^^J%
                 \thm@postskip\thm@preskip
             }
         \makeatother
+        \makeevenhead{headings}{\thepage}{}{\slshape\sffamily\leftmark}
+        \makeoddhead{headings}{\slshape\sffamily\rightmark}{}{\thepage}
         \let\oldproofname=\proofname
         \renewcommand{\proofname}{\sffamily{\oldproofname}}
         \let\oldcftbookfont\cftbookfont
