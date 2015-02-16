@@ -125,6 +125,7 @@
 
 % memoir template
 \ifmemoir
+    \setlength{\epigraphrule}{0pt}
     \ifarticle
         \counterwithout{section}{chapter}
         \setsecnumdepth{subsubsection}
