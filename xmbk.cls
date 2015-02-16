@@ -256,10 +256,6 @@
 \fi
 \RequirePackage[noend]{algpseudocode}
 \makeatletter
-    %\newcommand\fs@algo{
-    %    \def\@fs@pre{\begin{spacing}{1}}\def\@fs@post{}%
-    %    \def\@fs@mid{\end{spacing}\vspace\abovecaptionskip\relax}%
-    %    \let\@fs@iftopcapt\iffalse}
     \ifhangul
         \renewcommand{\ALG@name}{알고리즘}
         \renewcommand{\listalgorithmname}{\ALG@name~차례}
@@ -283,6 +279,17 @@
 
 % various packages for table
 \RequirePackage{booktabs,array,multirow}
+\let\oldtabular\tabular
+\let\endoldtabular\endtabular
+\renewenvironment{tabular}{%
+  \ifhangul
+    \renewcommand*{\arraystretch}{1.5}%
+  \else
+    \renewcommand*{\arraystretch}{1.2}%
+  \fi
+  \oldtabular
+}{\endoldtabular}
+
 % allows customizing list environments
 \RequirePackage[inline]{enumitem}
 \setlist[enumerate,1]{label=\arabic*.}
