@@ -561,7 +561,7 @@ __</rdf:RDF>^^J%
 \fi
 \RequirePackage{cleveref}
 \newcommand{\crefrangeconjunction}{--}
-\newcommand{\crefmiddleconjunction}{, }
+\newcommand{\crefmiddleconjunction}{,\space}
 \crefformat{section}{\S#2#1#3}
 \Crefformat{section}{\S#2#1#3}
 \crefformat{subsection}{\S#2#1#3}
@@ -643,10 +643,10 @@ __</rdf:RDF>^^J%
     \crefname{footnote}{각주}{각주}
     \crefname{lstlisting}{소스코드}{소스코드}
     \crefname{algorithm}{알고리즘}{알고리즘}
-    \newcommand{\crefpairconjunction}{\와 }
-    \newcommand{\creflastconjunction}{\와 }
-    \newcommand{\crefpairgroupconjunction}{\와 }
-    \newcommand{\creflastgroupconjunction}{, 그리고 }
+    \newcommand{\crefpairconjunction}{\와\space}
+    \newcommand{\creflastconjunction}{\와\space}
+    \newcommand{\crefpairgroupconjunction}{\와\space}
+    \newcommand{\creflastgroupconjunction}{, 그리고\space}
 \fi
 
 % allows include programming codes
