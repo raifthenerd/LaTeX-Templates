@@ -1,10 +1,8 @@
-
-
-\ProvidesClass{RAIF}[2015/01/29 RAIF: Personal XeLaTeX template]
+\ProvidesClass{xmbk}[2015/02/16 xmbk: XeLaTeX + memoir + beamer + koTeX (for personal template)]
 % cancel compiling if the engine is not XeTeX
 \RequirePackage{iftex}
 \ifXeTeX\else
-    \ClassError{RAIF}{Requires XeTeX!}{No LuaTeX, pdfLaTeX, etc.}
+    \ClassError{xmbk}{Requires XeTeX!}{No LuaTeX, pdfLaTeX, etc.}
 \fi
 
 % class options
@@ -296,7 +294,9 @@
 \setlist[itemize,4]{label=$\cdot$}
 
 % vertical space options
-\DisemulatePackage{setspace}
+\ifmemoir
+  \DisemulatePackage{setspace}
+\fi
 \RequirePackage{setspace}
 
 % Creative Commons License:  by / by-sa / by-nd / by-nc / by-nc-sa / by-nc-nd
@@ -352,13 +352,13 @@
     {by-nc-nd}{
         \def\@ccl@features@ko{저작자표시-비영리-변경금지}
         \def\@ccl@features{Attribution-NonCommercial-NoDerivs}
-    }}[\ClassError{RAIF}{Wrong CCL! choose one of: by / by-sa / by-nd / by-nc / by-nc-sa / by-nc-nd}{More infos on http://creativecommons.org/licenses/}]
+    }}[\ClassError{xmbk}{Wrong CCL! choose one of: by / by-sa / by-nd / by-nc / by-nc-sa / by-nc-nd}{More infos on http://creativecommons.org/licenses/}]
   \def\@ccl@license{#1}
 }
 \define@key{cclsetup}{version}{
   \IfDecimal{#1}
     {\def\@ccl@version{#1}}
-    {\ClassError{RAIF}{CCL Version must be decimal!}{Check out setccl command}}
+    {\ClassError{xmbk}{CCL Version must be decimal!}{Check out setccl command}}
 }
 \bgroup
   \catcode`\#=11
@@ -373,16 +373,16 @@
   }
   \newcommand{\cclurl}{\url{http://creativecommons.org/licenses/\@ccl@license/\@ccl@version/}}
   \ifhangul
-    \newcommand{\ccltext}{
+    \newcommand{\ccltext}{%
       크리에이티브 커먼즈 \@ccl@features@ko\space\@ccl@version\space 국제 라이선스}
-    \newcommand{\cclexplain}{
+    \newcommand{\cclexplain}{%
       \IfStrEq{\@ccl@author}{}{}{\@ccl@author 의 저작물인}\space
-      \IfStrEq{\@ccl@title}{}{이 저작물}{\@ccl@title} 에는 \ccltext 가 적용 되어 있습니다.
+      \IfStrEq{\@ccl@title}{}{이 저작물}{\@ccl@title}에는 \ccltext 가 적용 되어 있습니다.
       이 라이선스의 설명을 보고 싶으시면 \cclurl 을 참조하세요.}
   \else
-    \newcommand{\ccltext}{
+    \newcommand{\ccltext}{%
       Creative Commons \@ccl@features\space\@ccl@version\space International License}
-    \newcommand{\cclexplain}{
+    \newcommand{\cclexplain}{%
       \IfStrEq{\@ccl@title}{}{This work}{\@ccl@title}\space
       \IfStrEq{\@ccl@author}{}{}{by \@ccl@author}\space
       is licensed under the \ccltext. To view a copy of this license, visit \cclurl.}
