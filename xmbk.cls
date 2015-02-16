@@ -534,7 +534,7 @@ __</rdf:RDF>^^J%
 % advanced citations, references, captions
 \iffootcite
     \RequirePackage[notes,natbib]{biblatex-chicago}
-    \bibliography{bibliography}
+    \bibliography{assets/bibliography}
 \else
     \RequirePackage[sort&compress]{natbib}
     \ifbst
@@ -549,7 +549,7 @@ __</rdf:RDF>^^J%
             \cite[#1]{#2}
         \fi
     }
-    \newcommand{\printbibliography}{\bibliography{bibliography}}
+    \newcommand{\printbibliography}{\bibliography{assets/bibliography}}
 \fi
 \RequirePackage{cleveref}
 \newcommand{\crefrangeconjunction}{--}
