@@ -788,13 +788,9 @@ __</rdf:RDF>^^J%
                 \divide\thm@preskip\tw@
                 \thm@postskip\thm@preskip
             }
-            \renewenvironment{proof}[1][\proofname]{\par
-                \normalfont
-                \topsep6\p@\@plus6\p@ \trivlist
-                \item[\hskip\labelsep\itshape\sffamily
-                #1\@addpunct{.}]\ignorespaces
-            }{\qed\endtrivlist}
         \makeatother
+        \let\oldproofname=\proofname
+        \renewcommand{\proofname}{\sffamily{\oldproofname}}
         \let\oldcftbookfont\cftbookfont
         \renewcommand*{\cftbookfont}{\oldcftbookfont\sffamily}
         \let\oldcftpartfont\cftpartfont
