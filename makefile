@@ -1,6 +1,8 @@
-LATEX=latexmk
+OUTDIR=output
 
-DFFLAG=-xelatex -interaction=nonstopmode -outdir=output
+LATEX=latexmk -outdir=$(OUTDIR)
+
+DFFLAG=-xelatex -interaction=nonstopmode
 RFLAG=-quiet
 DFLAG=-pv
 
