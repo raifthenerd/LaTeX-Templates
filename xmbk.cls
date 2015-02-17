@@ -1,4 +1,3 @@
-
 \ProvidesClass{xmbk}[2015/02/16 xmbk: XeLaTeX + memoir + beamer + koTeX (for personal template)]
 % cancel compiling if the engine is not XeTeX
 \RequirePackage{iftex}
@@ -280,16 +279,16 @@
 
 % various packages for table
 \RequirePackage{booktabs,array,multirow}
-\let\oldtabular\tabular
-\let\endoldtabular\endtabular
-\renewenvironment{tabular}{%
+\let\oldtable\table
+\let\endoldtable\endtable
+\renewenvironment{table}{%
   \ifhangul
-    \renewcommand*{\arraystretch}{1.5}%
+    \renewcommand*{\arraystretch}{1.5}
   \else
-    \renewcommand*{\arraystretch}{1.2}%
+    \renewcommand*{\arraystretch}{1.2}
   \fi
-  \oldtabular
-}{\endoldtabular}
+  \oldtable
+}{\endoldtable}
 
 % allows customizing list environments
 \RequirePackage[inline]{enumitem}
@@ -650,6 +649,18 @@ __</rdf:RDF>^^J%
     \newcommand{\creflastgroupconjunction}{, 그리고\space}
 \fi
 
+% index & glossary
+\ifmemoir
+  \RequirePackage[toc,nopostdot,nonumberlist]{glossaries}
+  \makenoidxglossaries
+  \setacronymstyle{long-short}
+  \setglossarystyle{super}
+  \loadglsentries{assets/glossaries}
+  \let\oldindex\index
+  \renewcommand{\index}[1]{#1\oldindex{#1}}
+  \makeindex
+\fi
+
 % allows include programming codes
 \RequirePackage{listings}
 \ifhangul
@@ -687,7 +698,7 @@ __</rdf:RDF>^^J%
 % default styles : memoir / beamer
 \lstdefinestyle{memoir} {
     numberstyle=\tiny\ttfamily,
-    frame=none,
+    frame=single,
     backgroundcolor=\color{background},
     rulecolor=\color{text},
     commentstyle=\em,
@@ -800,6 +811,8 @@ __</rdf:RDF>^^J%
         \makeatother
         \makeevenhead{headings}{\thepage}{}{\slshape\sffamily\leftmark}
         \makeoddhead{headings}{\slshape\sffamily\rightmark}{}{\thepage}
+        \let\oldglsnamefont\glsnamefont
+        \renewcommand*{\glsnamefont}{\oldglsnamefont\sffamily}
         \let\oldproofname=\proofname
         \renewcommand{\proofname}{\sffamily{\oldproofname}}
         \let\oldcftbookfont\cftbookfont
