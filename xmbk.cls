@@ -660,9 +660,9 @@ __</rdf:RDF>^^J%
   \setacronymstyle{long-short}
   \setglossarystyle{super}
   \loadglsentries{assets/glossaries}
+  \makeindex
   \let\oldindex\index
   \renewcommand{\index}[1]{#1\oldindex{#1}}
-  \makeindex
 \fi
 
 % allows include programming codes
