@@ -60,29 +60,28 @@
 \DeclareOptionX{bst}[]{\newcommand\bst{#1}\bsttrue}
 
 % base class : memoir (default) / beamer
-\newcommand{\baseclass}{}
-\newif\ifmemoir\memoirfalse
+\newif\ifmemoir\memoirtrue
 \DeclareOptionX{memoir}{
-    \memoirtrue
-    \renewcommand{\baseclass}{memoir}
     \ExecuteOptionsX{allserif}
     \ExecuteOptionsX{borderlinks}
+    \DeclareOptionX*{\PassOptionsToClass{\CurrentOption}{memoir}}
 }
 \DeclareOptionX{beamer}{
     \memoirfalse
-    \renewcommand{\baseclass}{beamer}
-    \PassOptionsToClass{notheorems}{\baseclass}
-    \PassOptionsToClass{compress}{\baseclass}
     \ExecuteOptionsX{allsans}
     \ExecuteOptionsX{colorlinks}
     \ExecuteOptionsX{article}
+    \DeclareOptionX*{\PassOptionsToClass{\CurrentOption}{beamer}}
 }
 \ExecuteOptionsX{memoir}
 
 % pass memoir / beamer options
-\DeclareOptionX*{\PassOptionsToClass{\CurrentOption}{\baseclass}}
 \ProcessOptionsX
-\LoadClass{\baseclass}
+\ifmemoir
+    \LoadClass{memoir}
+\else
+    \LoadClass[notheorems,compress]{beamer}
+\fi
 
 % define color scheme
 \RequirePackage{xcolor}
