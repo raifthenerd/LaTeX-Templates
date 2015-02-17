@@ -255,18 +255,22 @@
     \RequirePackage[chapter]{algorithm}
 \fi
 \RequirePackage[noend]{algpseudocode}
+\floatstyle{plain}
+\restylefloat*{algorithm}
 \makeatletter
     \ifhangul
         \renewcommand{\ALG@name}{알고리즘}
         \renewcommand{\listalgorithmname}{\ALG@name~차례}
     \fi
+    \algrenewcommand\ALG@beginalgorithmic{\small}
+    \algrenewcommand\alglinenumber[1]{\tiny\ttfamily #1}
 \makeatother
-\floatstyle{plain}
-\restylefloat*{algorithm}
 \ifmemoir
     \newlistof{listofalgorithms}{loa}{\listalgorithmname}
     \newlistentry{algorithm}{loa}{0}
 \fi
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
 \algnewcommand\algorithmicto{\textbf{to}}
 \algnewcommand\algorithmicdownto{\textbf{downto}}
 \algdef{SE}[FOR]{ForTo}{EndForTo}[2]{\algorithmicfor\ #1 \algorithmicto\ #2 \algorithmicdo}{\algorithmicend\ \algorithmicfor}
@@ -747,6 +751,7 @@ __</rdf:RDF>^^J%
 \fi
 % setting...
 \lstset {
+    float,
     numbers=none,
     tabsize=4,
     firstnumber=auto,
@@ -758,7 +763,6 @@ __</rdf:RDF>^^J%
     belowskip=\intextsep,
     abovecaptionskip=\abovecaptionskip,
     belowcaptionskip=\belowcaptionskip,
-    xleftmargin=16pt,
     captionpos=b,
     showspaces=false,
     keepspaces=true,
