@@ -199,6 +199,14 @@
 
 % allows using mathematical expression
 \RequirePackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+\everydisplay\expandafter{\the\everydisplay\def\baselinestretch{1.0}\selectfont}
+\ifmemoir\else
+\makeatletter
+\renewcommand\donotcolorouterdisplaymaths{%
+  \def\baselinestretch{1.0}\selectfont\everydisplay{\everydisplay{\beamer@setdisplaymathcolor}}
+}
+\makeatother
+\fi
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \ifhangul
@@ -286,9 +294,9 @@
 \let\endoldtable\endtable
 \renewenvironment{table}{%
   \ifhangul
-    \renewcommand*{\arraystretch}{1.5}
+    \renewcommand*{\arraystretch}{1.3888}
   \else
-    \renewcommand*{\arraystretch}{1.2}
+    \renewcommand*{\arraystretch}{1.0}
   \fi
   \oldtable
 }{\endoldtable}
