@@ -185,15 +185,9 @@
     \setbeamercolor{block body alerted}{fg=text, bg=danger-bg}
     \setbeamercolor{page number in head/foot}{fg=gray-light}
     \makeatletter
-        \def\th@plain{
-            \def\inserttheoremblockenv{block}
-        }
-        \def\th@definition{
-            \def\inserttheoremblockenv{exampleblock}
-        }
-        \def\th@remark{
-            \def\inserttheoremblockenv{alertblock}
-        }
+        \def\th@plain{\def\inserttheoremblockenv{block}}
+        \def\th@definition{\def\inserttheoremblockenv{exampleblock}}
+        \def\th@remark{\def\inserttheoremblockenv{alertblock}}
     \makeatother
 \fi
 
@@ -292,6 +286,7 @@
 \RequirePackage{booktabs,array,multirow}
 \let\oldtable\table
 \let\endoldtable\endtable
+\ifmemoir
 \renewenvironment{table}{%
   \ifhangul
     \renewcommand*{\arraystretch}{1.3888}
@@ -300,6 +295,7 @@
   \fi
   \oldtable
 }{\endoldtable}
+\fi
 
 % allows customizing list environments
 \RequirePackage[inline]{enumitem}
@@ -902,25 +898,25 @@ __</rdf:RDF>^^J%
 \setmainhangulfont[
     Path=assets/fonts/KoPub/,
     UprightFont={* Light.otf},
-    ItalicFont={* Light.otf}, ItalicFeatures={FakeSlant=.367},
+    ItalicFont={* Light.otf}, ItalicFeatures={FakeSlant=.217},
     BoldFont={* Bold.otf},
-    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
+    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.217}
 ]{KoPubBatang_Pro}
 \setsanshangulfont[
     Path=assets/fonts/KoPub/,
     Scale=MatchUppercase,
     UprightFont={* Medium.otf},
-    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.367},
+    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.217},
     BoldFont={* Bold.otf},
-    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
+    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.217}
 ]{KoPubDotum_Pro}
 \setmonohangulfont[
     Path=assets/fonts/KoPub/,
     Scale=MatchLowercase,
     UprightFont={* Medium.otf},
-    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.367},
+    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.217},
     BoldFont={* Bold.otf},
-    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.367}
+    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.217}
 ]{KoPubDotum_Pro}
 \hanjabyhangulfont
 \ifhangul\ifmemoir
