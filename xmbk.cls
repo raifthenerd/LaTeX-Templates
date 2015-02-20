@@ -184,10 +184,27 @@
     \setbeamercolor{block title alerted}{fg=background, bg=danger}
     \setbeamercolor{block body alerted}{fg=text, bg=danger-bg}
     \setbeamercolor{page number in head/foot}{fg=gray-light}
+    \setbeamertemplate{frametitle continuation}[from second][(cont.)]
     \makeatletter
         \def\th@plain{\def\inserttheoremblockenv{block}}
         \def\th@definition{\def\inserttheoremblockenv{exampleblock}}
         \def\th@remark{\def\inserttheoremblockenv{alertblock}}
+    \makeatother
+    \newcommand*{\theorembreak}{%
+      \usebeamertemplate{theorem end}
+      \framebreak
+      \def\inserttheoremaddition{cont.}
+      \usebeamertemplate{theorem begin}}
+    \makeatletter
+    \newcommand*{\blockbreak}{%
+      \gdef\getcolor block body{}
+      \expandafter\gdef\expandafter\@block@theme\expandafter{\beamer@colbox@color}
+      \usebeamertemplate{block\expandafter\getcolor\@block@theme\space end}
+      \framebreak
+      \let\oldinsertblocktitle\insertblocktitle
+      \def\insertblocktitle{\oldinsertblocktitle\space (cont.)}
+      \usebeamertemplate{block\expandafter\getcolor\@block@theme\space begin}
+    }
     \makeatother
 \fi
 
