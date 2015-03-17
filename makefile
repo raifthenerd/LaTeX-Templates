@@ -4,7 +4,7 @@ LATEX=latexmk -outdir=$(OUTDIR)
 
 DFFLAG=-xelatex -interaction=nonstopmode
 RFLAG=-quiet
-DFLAG=-pv
+#DFLAG=-pv
 
 debug:
 	$(LATEX) $(DFFLAG) $(DFLAG)
