@@ -8,8 +8,9 @@ RFLAG=-quiet
 
 debug:
 	$(LATEX) $(DFFLAG) $(DFLAG)
+	$(LATEX) -c
 release:
 	$(LATEX) $(DFFLAG) $(RFLAG)
 	$(LATEX) -c
 clean:
-	$(LATEX) -C
+	rm $(OUTDIR)/*
