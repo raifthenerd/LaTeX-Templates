@@ -223,48 +223,6 @@
 \ifhangul
     \renewcommand{\proofname}{증명}
 \fi
-\theoremstyle{plain}
-\ifhangul
-    \ifarticle
-        \newtheorem{theorem}{정리}
-    \else
-        \newtheorem{theorem}{정리}[chapter]
-    \fi
-    \newtheorem{corollary}{따름정리}[theorem]
-    \newtheorem{lemma}[theorem]{보조정리}
-\else
-    \ifarticle
-        \newtheorem{theorem}{Theorem}
-    \else
-        \newtheorem{theorem}{Theorem}[chapter]
-    \fi
-    \newtheorem{corollary}{Corollary}[theorem]
-    \newtheorem{lemma}[theorem]{Lemma}
-\fi
-\theoremstyle{definition}
-\ifhangul
-    \ifarticle
-        \newtheorem{definition}{정의}
-        \newtheorem{example}{예제}
-    \else
-        \newtheorem{definition}{정의}[chapter]
-        \newtheorem{example}{예제}[chapter]
-    \fi
-\else
-    \ifarticle
-        \newtheorem{definition}{Definition}
-        \newtheorem{example}{Example}
-    \else
-        \newtheorem{definition}{Definition}[chapter]
-        \newtheorem{example}{Example}[chapter]
-    \fi
-\fi
-\theoremstyle{remark}
-\ifhangul
-    \newtheorem*{remark}{참고}
-\else
-    \newtheorem*{remark}{Remark}
-\fi
 
 % allows using algorithm environment
 \ifarticle
@@ -683,6 +641,50 @@ __</rdf:RDF>^^J%
   \makeindex
   \let\oldindex\index
   \renewcommand{\index}[1]{#1\oldindex{#1}}
+\fi
+
+% mathemathical environments e.g. theorem, lemma, ...
+\theoremstyle{plain}
+\ifhangul
+    \ifarticle
+        \newtheorem{theorem}{정리}
+    \else
+        \newtheorem{theorem}{정리}[chapter]
+    \fi
+    \newtheorem{corollary}{따름정리}[theorem]
+    \newtheorem{lemma}[theorem]{보조정리}
+\else
+    \ifarticle
+        \newtheorem{theorem}{Theorem}
+    \else
+        \newtheorem{theorem}{Theorem}[chapter]
+    \fi
+    \newtheorem{corollary}{Corollary}[theorem]
+    \newtheorem{lemma}[theorem]{Lemma}
+\fi
+\theoremstyle{definition}
+\ifhangul
+    \ifarticle
+        \newtheorem{definition}{정의}
+        \newtheorem{example}{예제}
+    \else
+        \newtheorem{definition}{정의}[chapter]
+        \newtheorem{example}{예제}[chapter]
+    \fi
+\else
+    \ifarticle
+        \newtheorem{definition}{Definition}
+        \newtheorem{example}{Example}
+    \else
+        \newtheorem{definition}{Definition}[chapter]
+        \newtheorem{example}{Example}[chapter]
+    \fi
+\fi
+\theoremstyle{remark}
+\ifhangul
+    \newtheorem*{remark}{참고}
+\else
+    \newtheorem*{remark}{Remark}
 \fi
 
 % allows include programming codes
