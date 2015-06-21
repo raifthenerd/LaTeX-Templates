@@ -37,7 +37,7 @@
     \hidelinksfalse\colorlinkstrue
 }
 
-% some memoir options (article / oneside)
+% some memoir options (article / oneside / wordlikemargin)
 \newif\ifarticle\articlefalse
 \DeclareOptionX{article}{
     \articletrue
@@ -48,6 +48,8 @@
     \onesidetrue
     \PassOptionsToClass{\CurrentOption}{memoir}
 }
+\newif\ifwordlikemargin\wordlikemarginfalse
+\DeclareOptionX{wordlikemargin}{\wordlikemargintrue}
 
 % beamer section page
 \newif\ifsectionpage\sectionpagefalse
@@ -124,6 +126,11 @@
 
 % memoir template
 \ifmemoir
+    \ifwordlikemargin
+        \setulmarginsandblock{1in}{1in}{*}
+        \setlrmarginsandblock{1in}{1in}{*}
+        \checkandfixthelayout
+    \fi
     \setlength{\epigraphrule}{0pt}
     \ifarticle
         \counterwithout{section}{chapter}
