@@ -225,6 +225,7 @@
 }
 \makeatother
 \fi
+\mathchardef\mhyphen="2D
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \ifhangul
