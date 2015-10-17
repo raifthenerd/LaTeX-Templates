@@ -246,8 +246,8 @@
         \renewcommand{\ALG@name}{알고리즘}
         \renewcommand{\listalgorithmname}{\ALG@name~차례}
     \fi
-    \algrenewcommand\ALG@beginalgorithmic{\small}
-    \algrenewcommand\alglinenumber[1]{\tiny\ttfamily #1}
+    \algrenewcommand\ALG@beginalgorithmic{\smaller[0.5]}
+    \algrenewcommand\alglinenumber[1]{\smaller[3]\ttfamily #1}
 \makeatother
 \ifmemoir
     \newlistof{listofalgorithms}{loa}{\listalgorithmname}
@@ -695,122 +695,8 @@ __</rdf:RDF>^^J%
     \newtheorem*{remark}{Remark}
 \fi
 
-% allows include programming codes
-\RequirePackage{listings}
-\ifhangul
-    \renewcommand{\lstlistingname}{소스코드}
-    \renewcommand{\lstlistlistingname}{\lstlistingname~차례}
-\else
-    \renewcommand{\lstlistlistingname}{List of Listings}
-\fi
-\ifmemoir
-    \newlistof{lstlistoflistings}{lol}{\lstlistlistingname}
-    \newlistentry{lstlisting}{lol}{0}
-\fi
-\makeatletter
-    \ifmemoir\else
-        \newskip\abovecaptionskip
-        \newskip\belowcaptionskip
-        \setlength\abovecaptionskip{7pt}
-        \setlength\belowcaptionskip{7pt}
-        \long\def\@makecaption#1#2{%
-            \def\insertcaptionname{\lstlistingname}%
-            \def\insertcaptionnumber{\thelstlisting}%
-            \def\insertcaption{#2}
-            \nobreak\vskip\abovecaptionskip\nobreak
-            \sbox\@tempboxa{\usebeamertemplate**{caption}}%
-            \ifdim \wd\@tempboxa >\hsize
-                \usebeamertemplate**{caption}\par
-            \else
-                \global \@minipagefalse
-                \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
-            \fi
-            \nobreak\vskip\belowcaptionskip\nobreak}
-    \fi
-    \let\c@lstlisting\@undefined
-\makeatother
-% default styles : memoir / beamer
-\lstdefinestyle{memoir} {
-    numberstyle=\tiny\ttfamily,
-    frame=single,
-    backgroundcolor=\color{background},
-    rulecolor=\color{text},
-    commentstyle=\em,
-}
-\lstdefinestyle{beamer} {
-    numberstyle=\color{listing-border}\tiny\ttfamily,
-    frame=single,
-    frameround=tttt,
-    backgroundcolor=\color{listing-bg},
-    rulecolor=\color{listing-border},
-    commentstyle=\color{gray-light},
-    stringstyle=\color{listing-str},
-    keywordstyle=\color{listing-kwd},
-}
-% inline environment: code / keyboard
-\lstdefinestyle{memoir-inline}{
-    basicstyle=\small\ttfamily,
-    keywordstyle={}, commentstyle={}, stringstyle={},
-}
-\lstdefinestyle{beamer-code}{
-    basicstyle=\small\ttfamily\color{code-text},
-    keywordstyle={}, commentstyle={}, stringstyle={},
-}
-\lstdefinestyle{beamer-kbd}{
-    basicstyle=\small\ttfamily\color{kbd-text},
-    keywordstyle={}, commentstyle={}, stringstyle={},
-}
-\ifmemoir
-    \newcommand{\lststyle}{memoir}
-    \newcommand\code[2][]{
-        \lstinline[style=memoir-inline]§#2§
-    }
-    \newcommand\kbd[2][]{
-        \lstinline[style=memoir-inline]§#2§
-    }
-\else
-    \newcommand{\lststyle}{beamer}
-    \newcommand\code[2][]{
-        \tikz[overlay]\node[
-        fill=code-bg, inner sep=0.5ex,
-        text depth=0.2ex, text height=1.25ex,
-        anchor=text, rectangle, rounded corners=1mm]
-        {\lstinline[style=beamer-code]§#2§};
-        \phantom{\lstinline§#2§\hskip-.8ex}
-    }
-    \newcommand\kbd[2][]{
-        \tikz[overlay]\node[
-        fill=kbd-bg, inner sep=0.5ex,
-        text depth=0.2ex, text height=1.25ex,
-        anchor=text, rectangle, rounded corners=1mm]
-        {\lstinline[style=beamer-kbd]§#2§};
-        \phantom{\lstinline§#2§\hskip-.8ex}
-    }
-\fi
-\lstset {
-    float,
-    numbers=none,
-    tabsize=4,
-    firstnumber=auto,
-    numbersep=8pt,
-    stepnumber=1,
-    breaklines=true,
-    breakindent=12pt,
-    aboveskip=\intextsep,
-    belowskip=\intextsep,
-    abovecaptionskip=\abovecaptionskip,
-    belowcaptionskip=\belowcaptionskip,
-    captionpos=b,
-    showspaces=false,
-    keepspaces=true,
-    showstringspaces=false,
-    showtabs=false,
-    basicstyle=\small\linespread{1}\ttfamily,
-    upquote=true,
-    style=\lststyle,
-}
-
 % font settings
+\RequirePackage{relsize}
 \ifdefaultsans
     \renewcommand{\familydefault}{\sfdefault}
 \else
@@ -968,6 +854,121 @@ __</rdf:RDF>^^J%
         \renewcommand{\@makefntext}[1]{\noindent\makebox[1.5em][r]\@thefnmark) #1}
     \makeatother
 \fi\fi
+
+% allows include programming codes
+\RequirePackage{listings}
+\ifhangul
+    \renewcommand{\lstlistingname}{소스코드}
+    \renewcommand{\lstlistlistingname}{\lstlistingname~차례}
+\else
+    \renewcommand{\lstlistlistingname}{List of Listings}
+\fi
+\ifmemoir
+    \newlistof{lstlistoflistings}{lol}{\lstlistlistingname}
+    \newlistentry{lstlisting}{lol}{0}
+\fi
+\makeatletter
+    \ifmemoir\else
+        \newskip\abovecaptionskip
+        \newskip\belowcaptionskip
+        \setlength\abovecaptionskip{7pt}
+        \setlength\belowcaptionskip{7pt}
+        \long\def\@makecaption#1#2{%
+            \def\insertcaptionname{\lstlistingname}%
+            \def\insertcaptionnumber{\thelstlisting}%
+            \def\insertcaption{#2}
+            \nobreak\vskip\abovecaptionskip\nobreak
+            \sbox\@tempboxa{\usebeamertemplate**{caption}}%
+            \ifdim \wd\@tempboxa >\hsize
+                \usebeamertemplate**{caption}\par
+            \else
+                \global \@minipagefalse
+                \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+            \fi
+            \nobreak\vskip\belowcaptionskip\nobreak}
+    \fi
+    \let\c@lstlisting\@undefined
+\makeatother
+% default styles : memoir / beamer
+\lstdefinestyle{memoir} {
+    numberstyle=\smaller[3]\ttfamily,
+    frame=single,
+    backgroundcolor=\color{background},
+    rulecolor=\color{text},
+    commentstyle=\em,
+}
+\lstdefinestyle{beamer} {
+    numberstyle=\color{listing-border}\smaller[3]\ttfamily,
+    frame=single,
+    frameround=tttt,
+    backgroundcolor=\color{listing-bg},
+    rulecolor=\color{listing-border},
+    commentstyle=\color{gray-light},
+    stringstyle=\color{listing-str},
+    keywordstyle=\color{listing-kwd},
+}
+% inline environment: code / keyboard
+\lstdefinestyle{memoir-inline}{
+    basicstyle=\smaller[0.5]\ttfamily,
+    keywordstyle={}, commentstyle={}, stringstyle={},
+}
+\lstdefinestyle{beamer-code}{
+    basicstyle=\smaller[0.5]\ttfamily\color{code-text},
+    keywordstyle={}, commentstyle={}, stringstyle={},
+}
+\lstdefinestyle{beamer-kbd}{
+    basicstyle=\smaller[0.5]\ttfamily\color{kbd-text},
+    keywordstyle={}, commentstyle={}, stringstyle={},
+}
+\ifmemoir
+    \newcommand{\lststyle}{memoir}
+    \newcommand\code[2][]{
+        \lstinline[style=memoir-inline]§#2§
+    }
+    \newcommand\kbd[2][]{
+        \lstinline[style=memoir-inline]§#2§
+    }
+\else
+    \newcommand{\lststyle}{beamer}
+    \newcommand\code[2][]{
+        \tikz[overlay]\node[
+        fill=code-bg, inner sep=0.5ex,
+        text depth=0.2ex, text height=1.25ex,
+        anchor=text, rectangle, rounded corners=1mm]
+        {\lstinline[style=beamer-code]§#2§};
+        \phantom{\lstinline§#2§\hskip-.8ex}
+    }
+    \newcommand\kbd[2][]{
+        \tikz[overlay]\node[
+        fill=kbd-bg, inner sep=0.5ex,
+        text depth=0.2ex, text height=1.25ex,
+        anchor=text, rectangle, rounded corners=1mm]
+        {\lstinline[style=beamer-kbd]§#2§};
+        \phantom{\lstinline§#2§\hskip-.8ex}
+    }
+\fi
+\lstset {
+    float,
+    numbers=none,
+    tabsize=4,
+    firstnumber=auto,
+    numbersep=8pt,
+    stepnumber=1,
+    breaklines=true,
+    breakindent=12pt,
+    aboveskip=\intextsep,
+    belowskip=\intextsep,
+    abovecaptionskip=\abovecaptionskip,
+    belowcaptionskip=\belowcaptionskip,
+    captionpos=b,
+    showspaces=false,
+    keepspaces=true,
+    showstringspaces=false,
+    showtabs=false,
+    basicstyle=\smaller[0.5]\linespread{1}\ttfamily,
+    upquote=true,
+    style=\lststyle,
+}
 
 % \titlepage design
 \ifmemoir
