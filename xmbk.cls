@@ -760,26 +760,33 @@ __</rdf:RDF>^^J%
     basicstyle=\small\ttfamily\color{kbd-text},
     keywordstyle={}, commentstyle={}, stringstyle={},
 }
-% set styles
-\newcommand{\lststyle}{}
-\newcommand{\lstcodestyle}{}
-\newcommand{\lstcodebg}{}
-\newcommand{\lstkbdstyle}{}
-\newcommand{\lstkbdbg}{}
 \ifmemoir
-    \renewcommand{\lststyle}{memoir}
-    \renewcommand{\lstcodestyle}{memoir-inline}
-    \renewcommand{\lstcodebg}{background}
-    \renewcommand{\lstkbdstyle}{memoir-inline}
-    \renewcommand{\lstkbdbg}{background}
+    \newcommand{\lststyle}{memoir}
+    \newcommand\code[2][]{
+        \lstinline[style=memoir-inline]§#2§
+    }
+    \newcommand\kbd[2][]{
+        \lstinline[style=memoir-inline]§#2§
+    }
 \else
-    \renewcommand{\lststyle}{beamer}
-    \renewcommand{\lstcodestyle}{beamer-code}
-    \renewcommand{\lstcodebg}{code-bg}
-    \renewcommand{\lstkbdstyle}{beamer-kbd}
-    \renewcommand{\lstkbdbg}{kbd-bg}
+    \newcommand{\lststyle}{beamer}
+    \newcommand\code[2][]{
+        \tikz[overlay]\node[
+        fill=code-bg, inner sep=0.5ex,
+        text depth=0.2ex, text height=1.25ex,
+        anchor=text, rectangle, rounded corners=1mm]
+        {\lstinline[style=beamer-code]§#2§};
+        \phantom{\lstinline§#2§\hskip-.8ex}
+    }
+    \newcommand\kbd[2][]{
+        \tikz[overlay]\node[
+        fill=kbd-bg, inner sep=0.5ex,
+        text depth=0.2ex, text height=1.25ex,
+        anchor=text, rectangle, rounded corners=1mm]
+        {\lstinline[style=beamer-kbd]§#2§};
+        \phantom{\lstinline§#2§\hskip-.8ex}
+    }
 \fi
-% setting...
 \lstset {
     float,
     numbers=none,
@@ -801,22 +808,6 @@ __</rdf:RDF>^^J%
     basicstyle=\small\linespread{1}\ttfamily,
     upquote=true,
     style=\lststyle,
-}
-\newcommand\code[2][]{
-    \tikz[overlay]\node[
-    fill=\lstcodebg, inner sep=0.5ex,
-    text depth=0.2ex, text height=1.25ex,
-    anchor=text, rectangle, rounded corners=1mm]
-    {\lstinline[style=\lstcodestyle]§#2§};
-    \phantom{\lstinline§#2§\hskip-.8ex}
-}
-\newcommand\kbd[2][]{
-    \tikz[overlay]\node[
-    fill=\lstkbdbg, inner sep=0.5ex,
-    text depth=0.2ex, text height=1.25ex,
-    anchor=text, rectangle, rounded corners=1mm]
-    {\lstinline[style=\lstkbdstyle]§#2§};
-    \phantom{\lstinline§#2§\hskip-.8ex}
 }
 
 % font settings
