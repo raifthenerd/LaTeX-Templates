@@ -228,6 +228,7 @@
 \mathchardef\mhyphen="2D
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator\sign{sgn}
 \ifhangul
     \renewcommand{\proofname}{증명}
 \fi
