@@ -1035,3 +1035,23 @@ __</rdf:RDF>^^J%
 \fi
 
 \endinput
+
+
+%% knitr option for using listings instead of knitr envs
+% <<setup, include=FALSE, cache=FALSE>>=
+% library(knitr)
+% opts_chunk$set(fig.path='figure/', cache.path='cache/', cache=TRUE)
+% options(formatR.arrow=TRUE, width=80)
+% hook_lst_default = function(x, options) paste(x, "\n")
+% hook_lst_wrap_chunk = function(x, options) {
+%     x = paste("\\begin{lstlisting}\n", x,
+%               "\\end{lstlisting}\n", sep = "")
+%     x = gsub('\\\\begin\\{kframe\\}\\s*\\\\end\\{lstlisting\\}[\n]?', '', x)
+%     gsub('\\\\end\\{kframe\\}\\s*\\\\begin\\{figure\\}',
+%          '\\\\end{lstlisting}\\\\begin{figure}', x)
+% }
+% knit_hooks$set(source = hook_lst_default, output = hook_lst_default,
+%                warning = hook_lst_default, message = hook_lst_default,
+%                error = hook_lst_default, chunk = hook_lst_wrap_chunk)
+% opts_knit$set(header=NULL)
+% @
