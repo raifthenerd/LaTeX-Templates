@@ -1044,8 +1044,14 @@ __</rdf:RDF>^^J%
 % options(formatR.arrow=TRUE, width=80)
 % hook_lst_default = function(x, options) paste(x, "\n")
 % hook_lst_wrap_chunk = function(x, options) {
-%     x = paste("\\begin{lstlisting}\n", x,
-%               "\\end{lstlisting}\n", sep = "")
+%     if (opt$engine == "R") lang = "R"
+%     else if (opt$engine == "Rcpp") lang = "C++"
+%     if (is.null(opt$caption))
+%         caption = ""
+%     else
+%         caption = paste(",caption=", opt$caption, sep="")
+%     x = paste("\\begin{lstlisting}[language=", lang, caption, "]\n",
+%               x, "\\end{lstlisting}\n", sep = "")
 %     x = gsub('\\\\begin\\{kframe\\}\\s*\\\\end\\{lstlisting\\}[\n]?', '', x)
 %     gsub('\\\\end\\{kframe\\}\\s*\\\\begin\\{figure\\}',
 %          '\\\\end{lstlisting}\\\\begin{figure}', x)
