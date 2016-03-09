@@ -254,8 +254,13 @@
     \newlistof{listofalgorithms}{loa}{\listalgorithmname}
     \newlistentry{algorithm}{loa}{0}
 \fi
-\renewcommand{\algorithmicrequire}{\textbf{Input:}}
-\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\ifhangul
+    \renewcommand{\algorithmicrequire}{\textbf{입력:}}
+    \renewcommand{\algorithmicensure}{\textbf{결과:}}
+\else
+    \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+    \renewcommand{\algorithmicensure}{\textbf{Output:}}
+\fi
 \algnewcommand\algorithmicto{\textbf{to}}
 \algnewcommand\algorithmicdownto{\textbf{downto}}
 \algdef{SE}[FOR]{ForTo}{EndForTo}[2]{\algorithmicfor\ #1 \algorithmicto\ #2 \algorithmicdo}{\algorithmicend\ \algorithmicfor}
@@ -790,38 +795,34 @@ __</rdf:RDF>^^J%
 \RequirePackage{fontspec}
 \defaultfontfeatures[\rmfamily,\sffamily]{Ligatures=TeX}
 \setsansfont[
-    Path=assets/fonts/TeX Gyre/,
     Scale=MatchUppercase,
-    UprightFont={*-regular.otf},
-    ItalicFont={*-italic.otf},
-    BoldFont={*-bold.otf},
-    BoldItalicFont={*-bolditalic.otf}
-]{texgyreheros}
+    UprightFont={*:style=Regular},
+    ItalicFont={*:style=Italic},
+    BoldFont={*:style=Bold},
+    BoldItalicFont={*:style=Bolditalic}
+]{TeX Gyre Heros}
 
 % korean option
 \RequirePackage{xetexko}
 \setmainhangulfont[
-    Path=assets/fonts/KoPub/,
-    UprightFont={* Light.otf},
-    ItalicFont={* Light.otf}, ItalicFeatures={FakeSlant=.217},
-    BoldFont={* Bold.otf},
-    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.217}
+    UprightFont={* Light},
+    ItalicFont={* Light}, ItalicFeatures={FakeSlant=.217},
+    BoldFont={* Bold},
+    BoldItalicFont={* Bold}, BoldItalicFeatures={FakeSlant=.217}
 ]{KoPubBatang_Pro}
 \setsanshangulfont[
-    Path=assets/fonts/KoPub/,
     Scale=MatchUppercase,
-    UprightFont={* Medium.otf},
-    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.217},
-    BoldFont={* Bold.otf},
-    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.217}
+    UprightFont={* Medium},
+    ItalicFont={* Medium},ItalicFeatures={FakeSlant=.217},
+    BoldFont={* Bold},
+    BoldItalicFont={* Bold}, BoldItalicFeatures={FakeSlant=.217}
 ]{KoPubDotum_Pro}
 \setmonohangulfont[
-    Path=assets/fonts/KoPub/,
     Scale=MatchLowercase,
-    UprightFont={* Medium.otf},
-    ItalicFont={* Medium.otf},ItalicFeatures={FakeSlant=.217},
-    BoldFont={* Bold.otf},
-    BoldItalicFont={* Bold.otf}, BoldItalicFeatures={FakeSlant=.217}
+    UprightFont={* Medium},
+    ItalicFont={* Medium},ItalicFeatures={FakeSlant=.217},
+    BoldFont={* Bold},
+    BoldItalicFont={* Bold}, BoldItalicFeatures={FakeSlant=.217}
 ]{KoPubDotum_Pro}
 \hanjabyhangulfont
 \ifhangul\ifmemoir
@@ -897,6 +898,8 @@ __</rdf:RDF>^^J%
     backgroundcolor=\color{background},
     rulecolor=\color{text},
     commentstyle=\em,
+    stringstyle=\em,
+    keywordstyle=\bfseries,
 }
 \lstdefinestyle{beamer} {
     numberstyle=\color{listing-border}\smaller[3]\ttfamily,
